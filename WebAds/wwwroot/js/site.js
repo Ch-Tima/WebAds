@@ -1,4 +1,22 @@
-﻿// Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿$(function () {
 
-// Write your JavaScript code.
+    alert("Hello");
+    GetAd();
+
+});
+
+
+function GetAd() {
+
+    $.ajax({
+        url: "../api/Ad",
+        type: "GET",
+        success: function (data) {
+            console.log(data);
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+
+}
