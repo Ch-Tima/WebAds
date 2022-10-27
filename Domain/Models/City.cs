@@ -11,6 +11,6 @@ namespace Domain.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Region { get; set; }
-        public List<Ads> Adss { get; set; }
+        public List<Ad> Ads { get; set; }
     }
 }

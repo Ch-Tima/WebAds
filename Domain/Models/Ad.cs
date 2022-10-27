@@ -1,7 +1,7 @@
 ﻿
 namespace Domain.Models
 {
-    public class Ads
+    public class Ad
     {
         public int Id { get; set; }
 
@@ -23,7 +23,7 @@ namespace Domain.Models
         public Category Categoty { get; set; }
 
 
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
 
         public List<Comment> Comments { get; set; }
