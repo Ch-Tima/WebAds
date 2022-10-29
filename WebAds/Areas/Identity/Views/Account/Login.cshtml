@@ -1,0 +1,27 @@
+﻿
+<h3>Login!</h3>
+
+<form action="~/Identity/Account/Login" method="post">
+    
+    <input name="user.UserName" type="text" placeholder="email" />
+    <input name="user.PasswordHash" type="password" placeholder="password" />
+    
+    <input type="checkbox" id="persistent" />
+    <input type="hidden" value="false" id="isPersistent" name="isPersistent" />
+
+    <input type="submit" value="Login" />
+</form>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(function () {
+        $("#persistent").on("click", function () {
+            if (this.checked == "on") {
+                $("#isPersistent").val(false);
+            }
+            else {
+                $("#isPersistent").val(true);
+            }
+        });
+    });
+</script>

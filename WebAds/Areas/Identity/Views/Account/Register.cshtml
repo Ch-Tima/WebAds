@@ -1,0 +1,36 @@
+﻿<h1>Register!</h1>
+
+
+<form action="~/Identity/Account/Register" method="post" enctype="multipart/form-data">
+    <input type="email" value="logologi417@gmail.com" placeholder="n@gmail.com" name="Email" required />
+
+    <input type="text" value="log417" placeholder="Name" name="UserName" required />
+    <input type="text" value="logi" placeholder="Surname" name="Surname" required />
+
+    <input type="text" value="417" placeholder="Address" name="Address" required />
+    <input type="tel" value="000417" placeholder="PhoneNumber" name="NumberPhone" required />
+    
+    <input type="password" value="logologi417" placeholder="Password" name="PasswordHash" />
+    <input type="password" value="logologi417" placeholder="ConfirmPassword" name="PasswordHash" />
+
+    <input type="checkbox" id="mailing" />
+    <label>Send messages email:</label>
+    <input type="hidden" value="false" id="IsMailing" name="IsMailing" />
+
+    <button type="submit" id="btnRegister">Register</button>
+
+</form>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $(function () {
+        $("#mailing").on("click", function () {
+            if (this.checked == "on") {
+                $("#IsMailing").val(false);
+            }
+            else {
+                $("#IsMailing").val(true);
+            }
+        });
+    });
+</script>
