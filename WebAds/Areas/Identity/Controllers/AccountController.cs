@@ -38,46 +38,31 @@ namespace WebAds.Areas.Identity.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> Register(User user, IFormFile? file)
+        public async Task<IActionResult> Register(User user)
         {
-
             user.IconPath = "img/defUser.png";
             var result = await _userManager.CreateAsync(user, user.PasswordHash);
 
             if (result.Succeeded)
             {
-                return View();
+                return View("Login");
             }
             else
             {
-                return View("Login");
+                return View((object)result.Errors.First().Description);
             }
         }
 
-        [HttpPost]//logologi417@gmail.com
+        [HttpPost]
         public async Task<IActionResult> Login(User user, bool isPersistent)
         {
-            try
-            {
 
-                var result = await _signInManager.PasswordSignInAsync(user.UserName, user.PasswordHash, isPersistent, lockoutOnFailure: true);
-                if (result.Succeeded)
-                {
-                    var t = 1;
-                }
-                else
-                {
-                    var t = 0;
-                }
+            var result = await _signInManager.PasswordSignInAsync(user.UserName, user.PasswordHash, isPersistent, lockoutOnFailure: true);
+            if (result.Succeeded)
+                return Redirect("~/Home");
+            else
+                return View(nameof(Login), (object)"Can't find the user!");
 
-            }
-            catch (Exception ex)
-            {
-
-                throw ex;
-            }
-
-            return Redirect("~/Home");
         }
 
         [HttpGet]

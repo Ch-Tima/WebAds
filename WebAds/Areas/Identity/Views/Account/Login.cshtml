@@ -1,27 +1,52 @@
-﻿
-<h3>Login!</h3>
+﻿@model string;
 
-<form action="~/Identity/Account/Login" method="post">
-    
-    <input name="user.UserName" type="text" placeholder="email" />
-    <input name="user.PasswordHash" type="password" placeholder="password" />
-    
-    <input type="checkbox" id="persistent" />
-    <input type="hidden" value="false" id="isPersistent" name="isPersistent" />
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="~/css/Account.css">
+    <title>Login</title>
+</head>
+<body>
 
-    <input type="submit" value="Login" />
-</form>
+    <div class="MainContext">
+        <p>SingIn</p>
+        <form action="~/Identity/Account/Login" method="post">
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script>
-    $(function () {
-        $("#persistent").on("click", function () {
-            if (this.checked == "on") {
-                $("#isPersistent").val(false);
+            <input name="user.UserName" type="text" placeholder="UserName" />
+            <input name="user.PasswordHash" type="password" placeholder="password" />
+
+            <div class="Persistent">
+                <label>persistent:</label>
+                <input type="checkbox" id="persistent" />
+                <input type="hidden" value="false" id="isPersistent" name="isPersistent" />
+            </div>
+
+            <input type="submit" value="Login" />
+        </form>
+        @{
+            if (Model != null)
+            {
+               <p style="color:red;">@Model</p>
             }
-            else {
-                $("#isPersistent").val(true);
-            }
+        }
+    </div>
+
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        $(function () {
+            $("#persistent").on("click", function () {
+                if (this.checked == "on") {
+                    $("#isPersistent").val(false);
+                }
+                else {
+                    $("#isPersistent").val(true);
+                }
+            });
         });
-    });
-</script>
+    </script>
+
+</body>
+</html>

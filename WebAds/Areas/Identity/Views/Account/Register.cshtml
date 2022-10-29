@@ -1,36 +1,72 @@
-﻿<h1>Register!</h1>
+﻿@model string;
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="~/css/Account.css">
+    <title>Register</title>
+</head>
+<body>
 
 
-<form action="~/Identity/Account/Register" method="post" enctype="multipart/form-data">
-    <input type="email" value="logologi417@gmail.com" placeholder="n@gmail.com" name="Email" required />
+    <div class="MainContext">
+        <form id="regForm" action="~/Identity/Account/Register" method="post" enctype="multipart/form-data">
+            <input type="email" value="logologi417@gmail.com" placeholder="n@gmail.com" name="Email" required />
 
-    <input type="text" value="log417" placeholder="Name" name="UserName" required />
-    <input type="text" value="logi" placeholder="Surname" name="Surname" required />
+            <input type="text" value="log417" placeholder="Name" name="UserName" required />
+            <input type="text" value="logi" placeholder="Surname" name="Surname" required />
 
-    <input type="text" value="417" placeholder="Address" name="Address" required />
-    <input type="tel" value="000417" placeholder="PhoneNumber" name="NumberPhone" required />
-    
-    <input type="password" value="logologi417" placeholder="Password" name="PasswordHash" />
-    <input type="password" value="logologi417" placeholder="ConfirmPassword" name="PasswordHash" />
+            <input type="text" value="417" placeholder="Address" name="Address" required />
+            <input type="tel" value="000417" placeholder="PhoneNumber" name="NumberPhone" required />
 
-    <input type="checkbox" id="mailing" />
-    <label>Send messages email:</label>
-    <input type="hidden" value="false" id="IsMailing" name="IsMailing" />
+            <input type="password" id="pas" value="logologi417" placeholder="Password" name="PasswordHash" />
+            <input type="password" id="pasConfirm" value="logologi417" placeholder="ConfirmPassword" name="PasswordHash" />
 
-    <button type="submit" id="btnRegister">Register</button>
+            <input type="checkbox" id="mailing" />
+            <label>Send messages email:</label>
+            <input type="hidden" value="false" id="IsMailing" name="IsMailing" />
 
-</form>
+            <button type="button" id="btnRegister">Register</button>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script>
-    $(function () {
-        $("#mailing").on("click", function () {
-            if (this.checked == "on") {
-                $("#IsMailing").val(false);
+        </form>
+        @{
+            if (Model != null){
+                <p style="color:red;">@Model</p>
             }
-            else {
-                $("#IsMailing").val(true);
+            else{
+                <p id="ErrorP" style="color:red;"></p>
             }
+        }
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script>
+        $(function () {
+            console.log("mailing");
+            $("#mailing").on("click", function () {
+                if (this.checked == "on") {
+                    $("#IsMailing").val(false);
+                }
+                else {
+                    $("#IsMailing").val(true);
+                }
+            });
+            console.log("btnRegister");
+            $("#btnRegister").on("click", function () {
+                if ($("#pasConfirm").val() == $("#pas").val())
+                {
+                    console.log("submit");
+                    $("#regForm").submit();
+                }
+                else{
+                    console.log("ErrorP");
+                    $("#ErrorP").text("ConfirmPassword is incorrect!");
+                }
+            });
+
         });
-    });
-</script>
+    </script>
+
+</body>
+</html>
