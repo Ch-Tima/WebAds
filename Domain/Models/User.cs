@@ -8,7 +8,9 @@ namespace Domain.Models
         public string Surname { get; set; }
         public string IconPath { get; set; }
         public string Address { get; set; }
-        public string NumberPhone { get; set; }
+
+
+        public bool IsMailing { get; set; }
 
         public List<Comment> Comments { get; set; }
         public List<Ad> Ads { get; set; }

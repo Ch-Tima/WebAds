@@ -8,7 +8,10 @@ namespace Domain.Models
         public string Name { get; set; }
         public string Content { get; set; }
 
+        public string? PathImg {  get; set; }
+
         public decimal Price { get; set; }
+
 
         public DateTime DateCreate { get; set; }
 
@@ -17,15 +20,15 @@ namespace Domain.Models
 
 
         public int CityId { get; set; }
-        public City City { get; set; }
+        public City? City { get; set; }
 
         public int CategotyId { get; set; }
-        public Category Categoty { get; set; }
+        public Category? Categoty { get; set; }
 
 
-        public string UserId { get; set; }
-        public User User { get; set; }
+        public string? UserId { get; set; }
+        public User? User { get; set; }
 
-        public List<Comment> Comments { get; set; }
+        public List<Comment>? Comments { get; set; }
     }
 }
