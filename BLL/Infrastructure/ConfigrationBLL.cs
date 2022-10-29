@@ -14,6 +14,7 @@ namespace BLL.Infrastructure
     {
         public static void Configure(this IServiceCollection services, IConfiguration configuration)
         {
+            var t = configuration.GetValue<string>("DbConection");
             services.AddDbContext<AdDbContext>(opt => opt.UseSqlServer(configuration.GetValue<string>("DbConection")));
 
             services.AddTransient<AdRepository>();
@@ -22,7 +23,14 @@ namespace BLL.Infrastructure
             services.AddTransient<CommentRepository>();
             services.AddTransient<UserRepository>();
 
-            services.AddIdentity<User, IdentityRole>(opt => opt.Password.RequireDigit = false)
+            services.AddIdentity<User, IdentityRole>(opt =>
+            {
+                opt.Password.RequireDigit = false;
+                opt.Password.RequireLowercase = false;
+                opt.Password.RequireNonAlphanumeric = false;
+                opt.Password.RequireUppercase = false;
+                //opt.SignIn.RequireConfirmedAccount = true;
+            })
                 .AddEntityFrameworkStores<AdDbContext>()
                 .AddDefaultTokenProviders();
 

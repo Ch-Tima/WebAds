@@ -22,7 +22,11 @@ namespace BLL.Services
         {
             return await _AdRepository.GetAllAsync();
         }
-
+        public async Task<IEnumerable<Ad>> Find(string userId)
+        {
+            var t = await _AdRepository.Find(x => x.UserId == userId);
+            return t;
+        }
         public async Task<Ad> GetAsync(int id, bool fullLoad = false)
         {
             if (fullLoad)
