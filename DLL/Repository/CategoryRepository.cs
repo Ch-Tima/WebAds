@@ -3,6 +3,7 @@
 using DLL.Context;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace DLL.Repository
 {
@@ -17,6 +18,11 @@ namespace DLL.Repository
         {
             await _dbContext.Categories.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Category>> Find(Expression<Func<Category, bool>> expression)
+        {
+            return await _dbContext.Categories.Where(expression).ToListAsync();
         }
 
         public async Task<IEnumerable<Category>> GetAllAsync()

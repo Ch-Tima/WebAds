@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -21,6 +22,11 @@ namespace DLL.Repository
         {
             await _dbContext.Comments.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<Comment>> Find(Expression<Func<Comment, bool>> expression)
+        {
+            return await _dbContext.Comments.Where(expression).ToListAsync();
         }
 
         public async Task<IEnumerable<Comment>> GetAllAsync()

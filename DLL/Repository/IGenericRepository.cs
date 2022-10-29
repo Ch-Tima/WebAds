@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using Domain.Models;
+using System.Linq.Expressions;
 
 namespace DLL.Repository
 {
@@ -8,6 +9,7 @@ namespace DLL.Repository
 
         Task<T> GetAsync(int id);
         Task<IEnumerable<T>> GetAllAsync();
+        Task<IEnumerable<T>> Find(Expression<Func<T, bool>> expression);
 
         Task<bool> RemoveAsync(int id);
 

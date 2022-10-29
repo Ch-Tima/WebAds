@@ -8,7 +8,7 @@ namespace DLL.Context
     {
         public AdDbContext(DbContextOptions<AdDbContext> options) : base(options)
         {
-            Database.EnsureDeleted();
+            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -36,8 +36,7 @@ namespace DLL.Context
             modelBuilder.Entity<User>().Property(x => x.Surname).IsRequired().HasColumnType("varchar").HasMaxLength(100);
             modelBuilder.Entity<User>().Property(x => x.IconPath).IsRequired().HasColumnType("varchar").HasMaxLength(600);
             modelBuilder.Entity<User>().Property(x => x.Address).IsRequired().HasColumnType("varchar").HasMaxLength(100);
-            modelBuilder.Entity<User>().Property(x => x.NumberPhone).IsRequired().HasColumnType("varchar").HasMaxLength(100);
-
+            modelBuilder.Entity<User>().Property(x => x.IsMailing).IsRequired().HasColumnType("bit").HasDefaultValue(false);
 
             //Categoty
             modelBuilder.Entity<Category>().HasIndex(x => x.Id).IsUnique();

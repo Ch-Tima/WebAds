@@ -19,6 +19,11 @@ namespace DLL.Repository
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<User>> Find(Expression<Func<User, bool>> expression)
+        {
+            return await _dbContext.Users.Where(expression).ToListAsync();
+        }
+
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _dbContext.Users.ToListAsync();

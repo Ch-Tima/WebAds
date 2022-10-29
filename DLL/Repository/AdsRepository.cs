@@ -2,6 +2,8 @@
 using DLL.Context;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace DLL.Repository
 {
@@ -22,6 +24,11 @@ namespace DLL.Repository
             }
         }
 
+        public async Task<IEnumerable<Ad>> Find(Expression<Func<Ad, bool>> predicate)
+        {
+            return await _dbContext.Ads.Where(predicate).ToListAsync();
+        }
+
         public async Task<IEnumerable<Ad>> GetAllAsync()
         {
             return await _dbContext.Ads.ToListAsync();
@@ -32,6 +39,7 @@ namespace DLL.Repository
             return await _dbContext.Ads
                 .Include(x => x.User)
                 .Include(x => x.Categoty)
+                .Include(x => x.City)
                 .Include(x => x.Comments)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }

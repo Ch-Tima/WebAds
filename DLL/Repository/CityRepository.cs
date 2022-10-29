@@ -2,6 +2,7 @@
 using DLL.Context;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace DLL.Repository
 {
@@ -16,6 +17,11 @@ namespace DLL.Repository
         {
             await _dbContext.Cities.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<City>> Find(Expression<Func<City, bool>> expression)
+        {
+            return await _dbContext.Cities.Where(expression).ToListAsync();
         }
 
         public async Task<IEnumerable<City>> GetAllAsync()
