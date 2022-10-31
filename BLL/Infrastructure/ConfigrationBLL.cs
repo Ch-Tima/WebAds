@@ -29,12 +29,12 @@ namespace BLL.Infrastructure
                 opt.Password.RequireLowercase = false;
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.Password.RequireUppercase = false;
-                //opt.SignIn.RequireConfirmedAccount = true;
-            })
-                .AddEntityFrameworkStores<AdDbContext>()
-                .AddDefaultTokenProviders();
+            }).AddEntityFrameworkStores<AdDbContext>().AddDefaultTokenProviders();
 
-            //configuration.GetValue();
+            services.ConfigureApplicationCookie(opt =>
+            {
+                opt.LoginPath = "/Identity/Account/Login";
+            });
         }
     }
 }
