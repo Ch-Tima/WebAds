@@ -1,0 +1,41 @@
+﻿* {
+    margin: 0px;
+    padding: 0px;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    align-items: center;
+}
+
+.MainContext p {
+    text-align: center;
+}
+
+.MainContext form {
+    display: inline-grid;
+}
+
+.MainContext input {
+    margin: 2px 0;
+    border-radius: 0.5em;
+    text-align: center;
+    border: solid gray 2px;
+    width: 150px;
+    outline: 0px;
+    background: white;
+}
+
+.MainContext button {
+    width: 125px;
+    margin: 5px auto;
+    height: 28px;
+    border-radius: 1em;
+}
+.Persistent {
+    display: flex;
+    width: 100px;
+    margin: 0 auto;
+}

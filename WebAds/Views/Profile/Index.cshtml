@@ -1,0 +1,55 @@
+﻿@model Domain.Models.User;
+@{
+}
+<h2>profile: Index</h2>
+
+
+<style>
+    .MainContener{
+        display: flex;
+        justify-content: center;
+    }
+
+    .Icon img{
+        width: 100px;
+        height: 100px;
+    }
+
+    .Icon{
+        margin-right:20px;
+    }
+    .RightData{
+        margin-left: 20px;
+    }
+</style>
+
+
+
+<div class="MainContener">
+    <input type="hidden" id="UserID" value="@Model.Id" />
+    <div class="Icon">
+        <img src="../../@Model.IconPath">
+    </div>
+    <div class="RightData">
+        <div class="UserData">
+
+            <label>Name:</label>
+            <p>@Model.UserName</p>
+
+            <label>Surname:</label>
+            <p>@Model.Surname</p>
+
+            <label>Email:</label>
+            <p>@Model.Email</p>
+
+        </div>
+        <a asp-controller="Profile" asp-action="AddNewAd">AddNew</a>
+    </div>
+</div>
+
+<div id="userAds" class="UserAds">
+</div>
+
+@section Scripts{
+    <script src="~/js/Profile/Profile.js"></script>
+}

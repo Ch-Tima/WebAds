@@ -8,7 +8,6 @@ namespace DLL.Context
     {
         public AdDbContext(DbContextOptions<AdDbContext> options) : base(options)
         {
-            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -18,7 +17,7 @@ namespace DLL.Context
             //Ad
             modelBuilder.Entity<Ad>().HasIndex(x => x.Id).IsUnique();
             modelBuilder.Entity<Ad>().Property(x => x.Name).IsRequired().HasColumnType("varchar").HasMaxLength(100);
-            modelBuilder.Entity<Ad>().Property(x => x.Content).HasColumnType("varchar").HasMaxLength(500);
+            modelBuilder.Entity<Ad>().Property(x => x.Content).IsRequired().HasColumnType("varchar").HasMaxLength(500);
             modelBuilder.Entity<Ad>().Property(x => x.DateCreate).HasDefaultValueSql("GetUtcDate()");
             modelBuilder.Entity<Ad>().Property(x => x.Price).IsRequired().HasColumnType("decimal").HasPrecision(9, 2);
             modelBuilder.Entity<Ad>().Property(x => x.IsVerified).IsRequired().HasColumnType("bit").HasDefaultValue(false);
@@ -34,15 +33,14 @@ namespace DLL.Context
 
             //User
             modelBuilder.Entity<User>().Property(x => x.Surname).IsRequired().HasColumnType("varchar").HasMaxLength(100);
-            modelBuilder.Entity<User>().Property(x => x.IconPath).IsRequired().HasColumnType("varchar").HasMaxLength(600);
             modelBuilder.Entity<User>().Property(x => x.Address).IsRequired().HasColumnType("varchar").HasMaxLength(100);
             modelBuilder.Entity<User>().Property(x => x.IsMailing).IsRequired().HasColumnType("bit").HasDefaultValue(false);
+            modelBuilder.Entity<User>().Property(x => x.IconPath).IsRequired().HasColumnType("varchar").HasMaxLength(225).HasDefaultValue("img/defUser.png");
 
             //Categoty
             modelBuilder.Entity<Category>().HasIndex(x => x.Id).IsUnique();
             modelBuilder.Entity<Category>().Property(x => x.Name).IsRequired().HasColumnType("varchar").HasMaxLength(100);
-            //modelBuilder.Entity<Category>().Property(x => x.CategotyId);
-            //???
+            modelBuilder.Entity<Category>().HasMany(x => x.Categories).WithOne(x => x.Categors).HasForeignKey(x => x.CategoryId);
 
 
             //City
@@ -56,7 +54,7 @@ namespace DLL.Context
             modelBuilder.Entity<Comment>().Property(x => x.DateCreate).HasDefaultValueSql("GetUtcDate()");
             //Product -> Comments OneToMany
             modelBuilder.Entity<Comment>().HasOne(x => x.Ad).WithMany(x => x.Comments).HasForeignKey(x => x.AdId);
-            //User -> Comments OneToMany //???
+            //User -> Comments OneToMany
             modelBuilder.Entity<Comment>().HasOne(x => x.User).WithMany(x => x.Comments).HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
 
 

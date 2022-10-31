@@ -17,10 +17,12 @@ builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredent
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-
 //Add Services
 builder.Services.AddTransient<UserServices>();
 builder.Services.AddTransient<AdsServices>();
+builder.Services.AddTransient<CityServices>();
+builder.Services.AddTransient<CommentServices>();
+builder.Services.AddTransient<CategoryServices>();
 
 builder.Services.Configure(builder.Configuration);
 
@@ -62,5 +64,10 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapAreaControllerRoute(
+    name: "Identity",
+    areaName: "Identity",
+    pattern: "Identity/{controller=Account}/{action=Register}");//Login
 
 app.Run();

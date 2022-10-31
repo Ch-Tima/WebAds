@@ -34,7 +34,7 @@ namespace DLL.Repository
         {
             return await _dbContext.Categories
                 .Include(x => x.Ads)
-                .Include(x => x.Categoties)
+                .Include(x => x.Categories)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 

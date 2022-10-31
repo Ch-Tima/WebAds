@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<Ad>
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -20,25 +21,42 @@
 
     .Ad {
         display: flex;
-        background-color: red;
+        background-color: aquamarine;
         width: 70%;
         height: 100px;
         margin: 3px auto;
     }
 </style>
 
+
+<div id="Filter">
+    
+  
+
+</div>
+
 <div class="MainContener">
 
     <div class="ListAd">
-        <div class="Ad">
-            <img src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.redd.it%2Fw3kr4m2fi3111.png&amp;f=1&amp;nofb=1&amp;ipt=3404a9a584ba0fe039663b488fb8c027fce7e6b783249972dce08222ce242048&amp;ipo=images" style="width: 80px;">
-            <div class="AddContent">
-                <h4 style="margin: auto;">Name_0</h4>
-                <p style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;font-size: 12px;">On the other hand, the implementation of the planned targets clearly defines each participant as capable of making their own decisions regarding innovative methods of process management. The high level of involvement of representatives of the target audience is a clear proof of a simple fact: socio-economic development requires independent ways to implement a system of mass participation! On the other hand, the high quality of positional research helps to improve the quality of the withdrawal of current assets.</p>
-            </div>
-            <p style="color: forestgreen; font-size: 16px;">100$</p>
-        </div>
+        
+        @{
+            foreach (var item in Model)
+            {
+                <form class="InputPageMovie" method="get" action="@Url.Action("AdDetails", "Home")">
+                    <input type="hidden" name="id" value='@item.Id' />
+                    <div class="Ad" onclick="this.parentNode.submit();">
+                        <img src="@item.PathImg" style="width: 80px;">
+                        <div class="AddContent">
+                            <h4 style="margin: auto;">@item.Name</h4>
+                            <p style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;font-size: 12px;">@item.Content</p>
+                        </div>
+                        <p style="color: forestgreen; font-size: 16px;">@item.Price $</p>
+                    </div>
+                </form>
+            }
+        }
 
     </div>
 
 </div>
+

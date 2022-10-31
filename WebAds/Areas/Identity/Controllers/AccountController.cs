@@ -2,19 +2,15 @@
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace WebAds.Areas.Identity.Controllers
 {
     [Area("Identity")]
     public class AccountController : Controller
     {
-        private readonly UserServices _userServices;
-        
+        private readonly UserServices _userServices;        
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
-
 
         public AccountController(UserServices userServices, 
             SignInManager<User> manager,
@@ -23,8 +19,6 @@ namespace WebAds.Areas.Identity.Controllers
             _userServices = userServices;
             _signInManager = manager;
             _userManager = userManager;
-
-
         }
 
         public IActionResult Register()
@@ -40,28 +34,33 @@ namespace WebAds.Areas.Identity.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(User user)
         {
-            user.IconPath = "img/defUser.png";
             var result = await _userManager.CreateAsync(user, user.PasswordHash);
 
             if (result.Succeeded)
-            {
                 return View("Login");
-            }
             else
-            {
                 return View((object)result.Errors.First().Description);
-            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Login(User user, bool isPersistent)
         {
+            try
+            {
+                if (user.UserName == null || user.PasswordHash == null)
+                    throw new Exception("UserName or Password equals null!");
 
-            var result = await _signInManager.PasswordSignInAsync(user.UserName, user.PasswordHash, isPersistent, lockoutOnFailure: true);
-            if (result.Succeeded)
-                return Redirect("~/Home");
-            else
-                return View(nameof(Login), (object)"Can't find the user!");
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, user.PasswordHash, isPersistent, lockoutOnFailure: true);
+
+                if (result != null && result.Succeeded)
+                    return Redirect("~/Home");//ReterntUrl
+                else
+                    throw new Exception("Can't find the user!");
+            }
+            catch (Exception ex)
+            {
+                return View(viewName: nameof(Login), model: ex.Message);
+            }
 
         }
 

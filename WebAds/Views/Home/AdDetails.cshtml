@@ -1,0 +1,122 @@
+﻿@model Ad;
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Domain.Models.User> SignInManager
+@inject UserManager<Domain.Models.User> UserManager
+
+<input type="hidden" id="AdId" value="@Model.Id" />
+
+
+
+
+
+<div class="MainContext">
+    <div class="SideLeft">
+        <div class="Icon">
+            <img src="@Model.PathImg">
+        </div>
+        <hr />
+        <div class="Discription">
+            <label>Content:</label>
+            <p>@Model.Content</p>
+        </div>
+    </div>
+    <div class="SideRight">
+        <label>Name:</label>
+        <p>@Model.Name</p>
+
+        <label>Price:</label>
+        <p>@Model.Price</p>
+
+        <label>City:</label>
+        <p>Name: @Model.City.Name</p>
+        <p>Region: @Model.City.Region</p>
+    </div>
+</div>
+
+
+@{
+    if (SignInManager.IsSignedIn(User))
+    {
+        <div>
+            <textarea id="commentText"></textarea>
+            <button id="btnAddComment" disabled>AddComment</button>
+        </div>
+    }
+}
+
+<div class="ListComment" id="listComment">
+</div>
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/AdDetails.css" asp-append-version="true" />
+}
+
+
+    @section Scripts{
+    <script>
+        $(function () {
+
+            Get();
+
+            $("#commentText").on("input", function () {
+
+                console.log($("#commentText").val().length > 0);
+
+                if ($("#commentText").val().length > 0) {
+                    $("#btnAddComment").removeAttr("disabled");
+                }
+                else {
+                    $("#btnAddComment").attr("disabled", "disabled")
+                }
+
+            });
+
+            $("#btnAddComment").on("click", function () {
+                Add();
+            });
+
+        });
+
+        function Get() {
+            $.ajax({
+                url: "../../api/Comment/" + $("#AdId").val(),
+                type: "GET",
+                success: function (data) {
+                    $("#listComment").html();
+                    for (var i = 0; i < data.length; i++) {
+                        $("#listComment").append("<div>" +
+                            "<p>User:" + data[i].userId + "</p>" +
+                            "<p>DateCreate:" + data[i].dateCreate + "</p>" +
+                            "<p>Content:" + data[i].content + "</p>" +
+                            "</div>");
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
+        function Add() {
+            console.log("Add");
+
+            var comment = new Object;
+            comment.Content = $("#commentText").val();
+            comment.AdId = $("#AdId").val();
+
+            $.ajax({
+                url: "../../api/Comment",
+                type: "POST",
+                contentType: 'application/json',
+                data: JSON.stringify(comment),
+                success: function (data) {
+                    console.log(data);
+                    Get();
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            });
+        }
+
+    </script>
+}
