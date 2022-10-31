@@ -3,6 +3,7 @@ using Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,7 +25,10 @@ namespace BLL.Services
         {
             return await _categoryRepository.GetAllAsync();
         }
-
+        public async Task<IEnumerable<Category>> Find(Expression<Func<Category, bool>> expression)
+        {
+            return await _categoryRepository.Find(expression);
+        }
         public async Task<Category> GetAsync(int id)
         {
             return await _categoryRepository.GetAsync(id);

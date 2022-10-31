@@ -33,7 +33,6 @@ namespace BLL.Services
                 return await _AdRepository.GetAsync(id);
             else
                 return await _AdRepository.GetOnlyAsync(id);
-
         }
         public async Task<bool> RemoveAsync(int id)
         {
