@@ -5,7 +5,7 @@
 });
 function GetAds() {
     $.ajax({
-        url: "../../api/Ads",
+        url: "../../api/ApiAds",
         type: "GET",
         data: {
             userId: $("#UserID").val()
@@ -14,7 +14,7 @@ function GetAds() {
 
             $("#userAds").html();
             for (var i = 0; i < data.length; i++) {
-                $("#userAds").append('<div style="width: 25%; background-color:antiquewhite;">' +
+                $("#userAds").append('<div class="Ad">' +
                     '<p>Name:' + data[i].name + '"</p><p>Price:' + data[i].price + '</p>' +
                     '<img src="' + data[i].pathImg + '" style="width: 80px;"></div>');
             }
