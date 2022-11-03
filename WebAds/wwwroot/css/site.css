@@ -16,3 +16,75 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+
+.ListAd {
+    background-color: antiquewhite;
+    width: 75%;
+    margin: 0 auto;
+}
+
+.Ad {
+    display: flex;
+    background-color: aquamarine;
+    width: 70%;
+    height: 100px;
+    margin: 3px auto;
+}
+
+
+.Nav {
+    list-style: none inside;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+}
+
+.Nav li {
+    display: block;
+    position: relative;
+    float: left;
+    background: #24af15; /* menu background color */
+}
+
+.Nav li a {
+    display: block;
+    padding: 0;
+    text-decoration: none;
+    width: 200px; /* this is the width of the menu items */
+    line-height: 35px; /* this is the hieght of the menu items */
+    color: #ffffff; /* list item font color */
+}
+
+.Nav li li a {
+    font-size: 80%;
+}
+/* smaller font size for sub menu items */
+.Nav li:hover {
+    background: #003f20;
+}
+/* highlights current hovered list item and the parent list items when hovering over sub menues */
+.Nav ul {
+    position: absolute;
+    padding: 0;
+    left: 0;
+    display: none; /* hides sublists */
+}
+
+.Nav li:hover ul ul {
+    display: none;
+}
+/* hides sub-sublists */
+.Nav li:hover ul {
+    display: block;
+}
+/* shows sublist on hover */
+.Nav li li:hover ul {
+    display: block; /* shows sub-sublist on hover */
+    margin-left: 200px; /* this should be the same width as the parent list item */
+    margin-top: -35px; /* aligns top of sub menu with top of list item */
+}
+a:not([href]):not([class]), a:not([href]):not([class]):hover {
+    color: #ffffff;
+    text-decoration: none;
+}

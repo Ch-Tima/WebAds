@@ -13,32 +13,36 @@
         width: 100%;
     }
 
-    .ListAd {
-        background-color: antiquewhite;
-        width: 75%;
-        margin: 0 auto;
-    }
-
-    .Ad {
-        display: flex;
-        background-color: aquamarine;
-        width: 70%;
-        height: 100px;
-        margin: 3px auto;
-    }
 </style>
 
 
-<div id="Filter">
-    
-  
-
+<div id="Filter" style="height: 32px;">
+    <div class="ListCategory">
+        <ul class='Nav'>
+            <li>
+                <a id="categoryName">Category</a>
+                <ul id="n0">
+                    <li><a val="-1">AllCategory</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="ListCity">
+        <ul class='Nav'>
+            <li>
+                <a id="cityName">City</a>
+                <ul id="listCity">
+                    <li><a val="-1">AllCity</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
 </div>
 
 <div class="MainContener">
 
-    <div class="ListAd">
-        
+    <div id="listAd" class="ListAd">
+
         @{
             foreach (var item in Model)
             {
@@ -60,3 +64,6 @@
 
 </div>
 
+@section Scripts{
+    <script src="~/js/site.js"></script>
+}
