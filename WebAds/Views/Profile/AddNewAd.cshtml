@@ -1,27 +1,39 @@
 ﻿
 
+
 <div>
     <form method="post" enctype="multipart/form-data">
-        <input id="Name" type="text" />
-        <input id="Content" type="text" />
-        <input id="Price" type="number" step="0.1" min="0.0" max="99999.9" />
 
-        <input id="AdImg" type="file"/>
+        <div class="MainContext" style="display: inline-grid;">
 
-        <div style="display: flex;">
-            <div class="City">
-                <label>listCity</label>
-                <select id="listCity">
-                </select>
+            <input id="Name" placeholder="name" type="text" />
+            <input id="Content" placeholder="Content" type="text" />
+            <input id="Price" placeholder="Price" type="number" step="0.1" min="0.0" max="99999.9" />
+
+            <input id="AdImg" type="file" />
+
+            <div style="display: flex;">
+                <div class="City" style="margin-right:5px;">
+                    <label>listCity</label>
+                    <select id="listCity">
+                    </select>
+                </div>
+                <div class="Category" style="margin-left:5px;">
+                    <div id="Filter">
+                        <input type="hidden" value="-1" id="categotyId" name="CategotyId" />
+                        <ul class='Nav'>
+                            <li>
+                                <a id="categoryName">CategoryList</a>
+                                <ul id="n0">
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div>
-            <div class="Category">
-                <label>listCategory</label>
-                <select id="listCategory">
-                </select>
-            </div>
+
+            <button type="button" id="btnAdd">AddNew</button>
         </div>
-
-        <button type="button" id="btnAdd">AddNew</button>
     </form>
 </div>
 

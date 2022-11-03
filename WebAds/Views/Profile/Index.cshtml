@@ -1,9 +1,7 @@
 ﻿@model Domain.Models.User;
 @{
+    ViewData["Title"] = Model.UserName != null ? Model.UserName : "ErrUserName";
 }
-<h2>profile: Index</h2>
-
-
 <style>
     .MainContener{
         display: flex;
@@ -47,7 +45,7 @@
     </div>
 </div>
 
-<div id="userAds" class="UserAds">
+<div id="userAds" class="ListAd">
 </div>
 
 @section Scripts{
