@@ -1,12 +1,10 @@
-﻿
-using DLL.Context;
+﻿using DLL.Context;
 using DLL.Repository;
-using Microsoft.Extensions.Configuration;
 using Domain.Models;
-using Microsoft.Extensions.DependencyInjection;
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BLL.Infrastructure
 {
@@ -14,21 +12,27 @@ namespace BLL.Infrastructure
     {
         public static void Configure(this IServiceCollection services, IConfiguration configuration)
         {
-            var t = configuration.GetValue<string>("DbConection");
-            services.AddDbContext<AdDbContext>(opt => opt.UseSqlServer(configuration.GetValue<string>("DbConection")));
+            var conDef = configuration.GetConnectionString("def");//appsettings
+            var conMain = configuration.GetValue<string>("DbConection");//Azure secret key
+            services.AddDbContext<AdDbContext>(opt => opt.UseSqlServer(conDef));
 
+            //Add Repository
             services.AddTransient<AdRepository>();
             services.AddTransient<CategoryRepository>();
             services.AddTransient<CityRepository>();
             services.AddTransient<CommentRepository>();
             services.AddTransient<UserRepository>();
 
+            //Set setings Identity
             services.AddIdentity<User, IdentityRole>(opt =>
             {
+                //Password settings
                 opt.Password.RequireDigit = false;
                 opt.Password.RequireLowercase = false;
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.Password.RequireUppercase = false;
+                opt.Password.RequiredLength = 4;
+
             }).AddEntityFrameworkStores<AdDbContext>().AddDefaultTokenProviders();
 
             services.ConfigureApplicationCookie(opt =>

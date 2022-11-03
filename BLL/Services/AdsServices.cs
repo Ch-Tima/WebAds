@@ -1,6 +1,7 @@
 ﻿
 using DLL.Repository;
 using Domain.Models;
+using System.Linq.Expressions;
 
 namespace BLL.Services
 {
@@ -22,10 +23,9 @@ namespace BLL.Services
         {
             return await _AdRepository.GetAllAsync();
         }
-        public async Task<IEnumerable<Ad>> Find(string userId)
+        public async Task<IEnumerable<Ad>> Find(Expression<Func<Ad, bool>> expression)
         {
-            var t = await _AdRepository.Find(x => x.UserId == userId);
-            return t;
+            return await _AdRepository.Find(expression);
         }
         public async Task<Ad> GetAsync(int id, bool fullLoad = false)
         {
