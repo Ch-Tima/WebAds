@@ -21,15 +21,8 @@ namespace WebAds.Areas.Identity.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Register()
-        {
-            return View();
-        }
-        public IActionResult Login()
-        {
-            return View();
-        }
-
+        public IActionResult Register() => View();
+        public IActionResult Login() => View();
 
         [HttpPost]
         public async Task<IActionResult> Register(User user)
@@ -53,7 +46,7 @@ namespace WebAds.Areas.Identity.Controllers
                 var result = await _signInManager.PasswordSignInAsync(user.UserName, user.PasswordHash, isPersistent, lockoutOnFailure: true);
 
                 if (result != null && result.Succeeded)
-                    return Redirect("~/Home");//ReterntUrl
+                    return Redirect("~/Home");
                 else
                     throw new Exception("Can't find the user!");
             }
@@ -61,7 +54,6 @@ namespace WebAds.Areas.Identity.Controllers
             {
                 return View(viewName: nameof(Login), model: ex.Message);
             }
-
         }
 
         [HttpGet]
@@ -69,7 +61,6 @@ namespace WebAds.Areas.Identity.Controllers
         {
             //delete local cookie
             await _signInManager.SignOutAsync();
-
             return Redirect("~/Home");
         }
 
