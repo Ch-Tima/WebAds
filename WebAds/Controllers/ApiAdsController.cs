@@ -31,7 +31,7 @@ namespace WebAd.Controllers
         [HttpGet]
         public async Task<IEnumerable<Ad>> GetAdUser(string userId)
         {
-            return await _AdServices.Find(userId);
+            return await _AdServices.Find(x => x.UserId == userId);
         }
 
         /// <summary>

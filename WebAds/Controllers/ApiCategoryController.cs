@@ -1,6 +1,5 @@
 ﻿using BLL.Services;
 using Domain.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAds.Controllers
@@ -34,7 +33,7 @@ namespace WebAds.Controllers
                     foreach (var category in item.Categories)
                     {
                         category.Categors = null;
-                        temp.Remove(category);//нужна рекурсия для глубины 3...
+                        temp.Remove(category);
                     }
                 }
             }
