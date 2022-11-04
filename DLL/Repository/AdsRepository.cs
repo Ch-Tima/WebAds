@@ -17,7 +17,7 @@ namespace DLL.Repository
 
         public async Task AddAsync(Ad entity)
         {
-            if(entity != null)
+            if (entity != null)
             {
                 await _dbContext.Ads.AddAsync(entity);
                 await _dbContext.SaveChangesAsync();
@@ -25,6 +25,15 @@ namespace DLL.Repository
         }
 
         public async Task<IEnumerable<Ad>> Find(Expression<Func<Ad, bool>> predicate)
+        {
+            return await _dbContext.Ads.Where(predicate)
+                .Include(x => x.User)
+                .Include(x => x.Categoty)
+                .Include(x => x.City)
+                .Include(x => x.Comments)
+                .ToListAsync();
+        }
+        public async Task<IEnumerable<Ad>> FindOnly(Expression<Func<Ad, bool>> predicate)
         {
             return await _dbContext.Ads.Where(predicate).ToListAsync();
         }
@@ -66,7 +75,26 @@ namespace DLL.Repository
         {
             try
             {
-                _dbContext.Entry(entity).State = EntityState.Modified;
+                if (entity == null)
+                    throw new Exception("Ad Equals null!");
+
+                if (entity.Id < 1)
+                    throw new Exception("Incorrect Id!");
+
+                var ad = await GetAsync(entity.Id);
+
+                if(ad == null)
+                    throw new Exception($"Not Found Ad ID:{entity.Id}!");
+
+                ad.Name = entity.Name ?? ad.Name;
+                ad.Content = entity.Content ?? ad.Content;
+                ad.PathImg = entity.PathImg ?? ad.PathImg ;
+                ad.Price = entity.Price > 0.0M ? entity.Price : ad.Price;
+                
+
+                ad.CityId = entity.CityId > 0 ? entity.CityId : ad.CityId;
+                ad.CategotyId = entity.CategotyId > 0 ? entity.CategotyId : ad.CategotyId;
+
                 await _dbContext.SaveChangesAsync();
             }
             catch (Exception ex)

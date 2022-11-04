@@ -23,9 +23,12 @@ namespace BLL.Services
         {
             return await _AdRepository.GetAllAsync();
         }
-        public async Task<IEnumerable<Ad>> Find(Expression<Func<Ad, bool>> expression)
+        public async Task<IEnumerable<Ad>> Find(Expression<Func<Ad, bool>> expression, bool fullLoad = false)
         {
-            return await _AdRepository.Find(expression);
+            if(fullLoad)
+                return await _AdRepository.Find(expression);
+            else
+                return await _AdRepository.FindOnly(expression);
         }
         public async Task<Ad> GetAsync(int id, bool fullLoad = false)
         {
