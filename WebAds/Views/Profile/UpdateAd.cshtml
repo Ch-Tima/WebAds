@@ -1,0 +1,57 @@
+﻿@model Ad
+@{
+
+}
+
+<div class="MainContext">
+
+    <form method="post" enctype="multipart/form-data" style="display: inline-grid;">
+
+        <input type="hidden" id="idAd" value="@Model.Id"/>
+
+        <input type="text" placeholder="Name" id="Name" value="@Model.Name"/>
+
+        <input type="text" placeholder="Content" id="Content" value="@Model.Content" />
+
+        <input type="number" min="0.0" max="9999999.9" id="Price" step="0.1" placeholder="Price" value="@Model.Price" />
+        
+        <img src="@Model.PathImg" style="width: 50px;"/>
+        <input type="hidden" id="AdImgOld" value="@Model.PathImg" />
+        <input type="file" id="AdImg" placeholder="Img" />
+
+        <div style="display: flex;">
+            <div class="City" style="margin-right:5px;">
+                <label>listCity</label>
+                <select id="listCity">
+                    <option value="@Model.CityId" selected>@Model.City.Name</option>
+                </select>
+            </div>
+            <div class="Category" style="margin-left:5px;">
+                <input type="hidden" value="@Model.CategotyId" id="categotyId" name="CategotyId" />
+                <ul class='Nav'>
+                    <li>
+                        <a id="categoryName">@Model.Categoty.Name</a>
+                        <ul id="n0">
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <button type="button" id="btnUpdate">Save</button>
+    </form>
+
+</div>
+
+@section Scripts{
+    <script src="~/js/Profile/OperationOnAds.js"></script>
+
+    <script>
+        $(function () {
+
+            GetCity();
+            GetCategory();
+
+            $("#btnUpdate").on("click", UpdateAd);
+        });
+    </script>
+}

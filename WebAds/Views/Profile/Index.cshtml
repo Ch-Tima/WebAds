@@ -3,24 +3,24 @@
     ViewData["Title"] = Model.UserName != null ? Model.UserName : "ErrUserName";
 }
 <style>
-    .MainContener{
+    .MainContener {
         display: flex;
         justify-content: center;
     }
 
-    .Icon img{
+    .Icon img {
         width: 100px;
         height: 100px;
     }
 
-    .Icon{
-        margin-right:20px;
+    .Icon {
+        margin-right: 20px;
     }
-    .RightData{
+
+    .RightData {
         margin-left: 20px;
     }
 </style>
-
 
 
 <div class="MainContener">
@@ -46,8 +46,21 @@
 </div>
 
 <div id="userAds" class="ListAd">
+    
+
 </div>
 
+
+    
+    
+
+
 @section Scripts{
-    <script src="~/js/Profile/Profile.js"></script>
+    <script src="~/js/Profile/OperationOnAds.js"></script>
+    <script>
+        $(function () {
+            GetAds();
+        });
+    </script>
+
 }

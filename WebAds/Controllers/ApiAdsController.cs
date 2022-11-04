@@ -50,7 +50,7 @@ namespace WebAd.Controllers
             else
             {
 
-                if(idCity > 0 && idCategory <= 0)
+                if (idCity > 0 && idCategory <= 0)
                     res.AddRange(await _AdServices.Find(x => x.CityId == idCity));
                 else
                 {
@@ -65,7 +65,7 @@ namespace WebAd.Controllers
                                 item.Categoty = null;
                         }
                     }
-                    if(idCity > 0)
+                    if (idCity > 0)
                     {
                         foreach (var item in new List<Ad>(res))
                         {
@@ -139,6 +139,72 @@ namespace WebAd.Controllers
             }
         }
 
+        [HttpDelete("{idAd}")]
+        public async Task<IActionResult> Remove(int idAd)
+        {
+            try
+            {
+
+                var user = await _userManager.GetUserAsync(User);
+
+                if (user == null)
+                    throw new Exception("Please LogIn to your account!");
+
+                if (idAd < 1)
+                        throw new Exception("Incorrect idAd");
+
+                var ads = await _AdServices.Find(x => x.UserId == user.Id && x.Id == idAd);
+
+                if(ads != null && ads.Count() == 1)
+                {
+                    if (await _AdServices.RemoveAsync(idAd))
+                        return Ok("The delete operation was succcessful!");
+                    else
+                        throw new Exception($"Failed to delete Ad(Id:{idAd})!");
+                }
+                else
+                    throw new Exception("Not found Ad!");
+
+
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update([FromForm]Ad ad, IFormFile? upload)
+        {
+            try
+            {
+
+                if(upload != null)
+                {
+                    bool f = false;
+                    if (ad.PathImg != null)
+                        f = DeleteFile(ad.PathImg);
+
+                    //Save Img
+                    var nameFile = HashTime() + ".png";
+                    if (await SaveFile(upload, nameFile))
+                    {
+                        ad.PathImg = "/FilesDb/" + nameFile;
+                    }
+                }
+
+                //Save Ad to db
+                await _AdServices.UpdateAsync(ad);
+
+                return Ok("The update operation was successful!");
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         private async Task<bool> SaveFile(IFormFile file, string newName)
         {
             try
@@ -156,6 +222,18 @@ namespace WebAd.Controllers
                 return true;
             }
             catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        private bool DeleteFile(string path)
+        {
+            try
+            {
+                System.IO.File.Delete(_appEnvironment.WebRootPath + path);
+                return true;
+            }
+            catch (Exception)
             {
                 return false;
             }
