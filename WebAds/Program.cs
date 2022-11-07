@@ -1,11 +1,11 @@
-using BLL.Infrastructure;
 using BLL.Services;
+using BLL.Infrastructure;
 using Domain.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 using Azure.Identity;
-using Microsoft.EntityFrameworkCore;
-using DLL.Context;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using System.Configuration;
+using Microsoft.Extensions.Configuration;
+using Microsoft.CodeAnalysis.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,19 +23,30 @@ builder.Services.AddTransient<AdsServices>();
 builder.Services.AddTransient<CityServices>();
 builder.Services.AddTransient<CommentServices>();
 builder.Services.AddTransient<CategoryServices>();
+builder.Services.AddTransient<IEmailSender, SendGridEmailService>();//SendGrid
+
+//Set SendGridEmailSenderOption
+builder.Services.Configure<SendGridEmailSenderOption>("SendGridEmail", opt =>
+{
+    opt.ApiKey = builder.Configuration["SenderGrid:ApiKey"];
+    opt.SenderEmail = builder.Configuration["SenderGrid:SenderEmail"];
+    opt.SenderName = builder.Configuration["SenderGrid:SenderName"];
+});
+
 
 builder.Services.Configure(builder.Configuration);
+
+
 
 
 //Add Swagger
 builder.Services.AddSwaggerGen(x =>
 {
-    x.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo() 
-    { 
+    x.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo()
+    {
         Title = "SwaggerApi",
         Version = "v1"
     });
-
 });
 
 var app = builder.Build();

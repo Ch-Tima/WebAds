@@ -14,5 +14,7 @@ namespace Domain.Models
 
         public List<Comment> Comments { get; set; }
         public List<Ad> Ads { get; set; }
+
+        //public List<UserRole> UserRoles { get; set; }
     }
 }

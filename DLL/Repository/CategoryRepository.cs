@@ -7,7 +7,7 @@ using System.Linq.Expressions;
 
 namespace DLL.Repository
 {
-    public class CategoryRepository : IGenericRepository<Category>
+    public class CategoryRepository : IGenericRepository<Category, int>
     {
         private readonly AdDbContext _dbContext;
         public CategoryRepository(AdDbContext context)

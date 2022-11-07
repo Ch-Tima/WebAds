@@ -1,5 +1,5 @@
 ﻿//Get userAds
-function GetAds() {
+function GetAds(arg) {
     $.ajax({
         url: "../../api/ApiAds",
         type: "GET",
@@ -10,14 +10,23 @@ function GetAds() {
 
             $("#userAds").html();
             for (var i = 0; i < data.length; i++) {
-                $("#userAds").append('<div id="Ad_' + data[i].id + '" class="Ad">' +
+
+                var tempString = '<div id="Ad_' + data[i].id + '" class="Ad">' +
                     '<p>Name:' + data[i].name + '"</p><p>Price:' + data[i].price + '</p>' +
-                    '<img src="' + data[i].pathImg + '" style="width: 80px;">' +
-                    '<button type="button" class="btnRemove" value="' + data[i].id + '">Remove</button>' +
-                    '<form method="post" action="../../Profile/UpdateAd">' +
-                    '<input type="hidden" value="' + data[i].id + '" name="idAd" />' +
-                    '<button type="submit">Update</button></form>' +
-                    '</div>');
+                    '<img src="' + data[i].pathImg + '" style="width: 80px;">';
+
+
+                if (arg) {
+                    tempString += '<button type="button" class="btnRemove" value="' + data[i].id + '">Remove</button>' +
+                        '<form method="post" action="../../Profile/UpdateAd">' +
+                        '<input type="hidden" value="' + data[i].id + '" name="idAd" />' +
+                        '<button type="submit">Update</button></form></div>';
+                }
+                else {
+                    tempString += '</div>';
+                }
+
+                $("#userAds").append(tempString);
             }
 
             $("button[class='btnRemove']").on("click", function () {

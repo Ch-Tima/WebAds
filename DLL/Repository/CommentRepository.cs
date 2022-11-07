@@ -11,7 +11,7 @@ using System.Xml.Linq;
 
 namespace DLL.Repository
 {
-    public class CommentRepository : IGenericRepository<Comment>
+    public class CommentRepository : IGenericRepository<Comment, int>
     {
         private readonly AdDbContext _dbContext;
         public CommentRepository(AdDbContext context)

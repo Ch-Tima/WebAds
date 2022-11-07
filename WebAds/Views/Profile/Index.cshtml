@@ -1,32 +1,23 @@
-﻿@model Domain.Models.User;
+﻿@model User;
 @{
-    ViewData["Title"] = Model.UserName != null ? Model.UserName : "ErrUserName";
+    ViewData["Title"] = Model != null ? Model.UserName : "ErrUserName";
 }
-<style>
-    .MainContener {
-        display: flex;
-        justify-content: center;
-    }
 
-    .Icon img {
-        width: 100px;
-        height: 100px;
-    }
-
-    .Icon {
-        margin-right: 20px;
-    }
-
-    .RightData {
-        margin-left: 20px;
-    }
-</style>
+@section Styles{
+    <link rel="stylesheet" href="~/css/Profile.css" />
+}
 
 
-<div class="MainContener">
-    <input type="hidden" id="UserID" value="@Model.Id" />
-    <div class="Icon">
-        <img src="../../@Model.IconPath">
+    <div class="MainContener">
+        <input type="hidden" id="UserID" value="@Model.Id" />
+        <div class="Icon">
+            <img class="UserIcon" src="../../@Model.IconPath">
+        @if (!ViewBag.IsPublicProfile)
+        {
+            <a asp-action="UpdateProfile" asp-controller="Profile">
+                <img class="EditIcon" src="../../img/edit.png" />
+            </a>
+        }
     </div>
     <div class="RightData">
         <div class="UserData">
@@ -40,27 +31,39 @@
             <label>Email:</label>
             <p>@Model.Email</p>
 
+
         </div>
-        <a asp-controller="Profile" asp-action="AddNewAd">AddNew</a>
+        @if (!ViewBag.IsPublicProfile)
+        {
+            <a asp-controller="Profile" asp-action="AddNewAd">AddNew</a>
+        }
     </div>
 </div>
 
 <div id="userAds" class="ListAd">
-    
-
 </div>
-
-
-    
-    
 
 
 @section Scripts{
     <script src="~/js/Profile/OperationOnAds.js"></script>
-    <script>
-        $(function () {
-            GetAds();
-        });
-    </script>
+    <script src="~/js/Profile/Profile.js"></script>
+
+
+    @if (ViewBag.IsPublicProfile)
+    {
+        <script>
+            $(function () {
+                GetAds(false);
+            });
+        </script>
+    }
+    else{
+        <script>
+            $(function () {
+                GetAds(true);
+            });
+        </script>
+    }
+
 
 }

@@ -11,14 +11,15 @@ namespace WebAds.Areas.Identity.Controllers
         private readonly UserServices _userServices;        
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public AccountController(UserServices userServices, 
-            SignInManager<User> manager,
-            UserManager<User> userManager)
+        public AccountController(UserServices userServices, SignInManager<User> manager,
+            UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userServices = userServices;
             _signInManager = manager;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public IActionResult Register() => View();
@@ -28,9 +29,13 @@ namespace WebAds.Areas.Identity.Controllers
         public async Task<IActionResult> Register(User user)
         {
             var result = await _userManager.CreateAsync(user, user.PasswordHash);
-
+            
             if (result.Succeeded)
+            {
+                //await _userManager.AddToRoleAsync(_userServices.Fin, "user");
+
                 return View("Login");
+            }
             else
                 return View((object)result.Errors.First().Description);
         }

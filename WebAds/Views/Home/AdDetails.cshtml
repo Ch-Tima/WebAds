@@ -2,6 +2,10 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<Domain.Models.User> SignInManager
 @inject UserManager<Domain.Models.User> UserManager
+@{
+
+}
+
 
 <input type="hidden" id="AdId" value="@Model.Id" />
 
@@ -30,6 +34,9 @@
         <label>City:</label>
         <p>Name: @Model.City.Name</p>
         <p>Region: @Model.City.Region</p>
+
+        <a href="~/Profile/Index/@Model.UserId">User Profile</a>
+        
     </div>
 </div>
 
@@ -37,10 +44,10 @@
 @{
     if (SignInManager.IsSignedIn(User))
     {
-        <div>
-            <textarea id="commentText"></textarea>
-            <button id="btnAddComment" disabled>AddComment</button>
-        </div>
+    <div>
+                    <textarea id="commentText"></textarea>
+                    <button id="btnAddComment" disabled>AddComment</button>
+    </div>
     }
 }
 

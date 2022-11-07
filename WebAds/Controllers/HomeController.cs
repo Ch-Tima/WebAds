@@ -71,50 +71,50 @@ namespace WebAd.Controllers
             //await _categoryServices.AddAsync(new Domain.Models.Category()
             //{
             //    Name = "Category_E1",
-            //    CategoryId = 1
+            //    CategoryId = 11
             //});
             //await _categoryServices.AddAsync(new Domain.Models.Category()
             //{
             //    Name = "Category_E2",
-            //    CategoryId = 1
+            //    CategoryId = 11
             //});
 
             //await _categoryServices.AddAsync(new Domain.Models.Category()
             //{
             //    Name = "Category_B1",
-            //    CategoryId = 3
+            //    CategoryId = 13
             //});
 
             //await _categoryServices.AddAsync(new Domain.Models.Category()
             //{
             //    Name = "Category_B1_1",
-            //    CategoryId = 6
+            //    CategoryId = 17
             //});
             //await _categoryServices.AddAsync(new Domain.Models.Category()
             //{
             //    Name = "Category_B1_2",
-            //    CategoryId = 6
+            //    CategoryId = 17
             //});
             //await _categoryServices.AddAsync(new Domain.Models.Category()
             //{
             //    Name = "Category_B1_3",
-            //    CategoryId = 6
+            //    CategoryId = 17
             //});
 
             //await _categoryServices.AddAsync(new Domain.Models.Category()
             //{
             //    Name = "Category_B1_2_A",
-            //    CategoryId = 8
+            //    CategoryId = 19
             //});
             //await _categoryServices.AddAsync(new Domain.Models.Category()
             //{
             //    Name = "Category_B1_2_B",
-            //    CategoryId = 8
+            //    CategoryId = 19
             //});
             //await _categoryServices.AddAsync(new Domain.Models.Category()
             //{
             //    Name = "Category_B1_2_C",
-            //    CategoryId = 8
+            //    CategoryId = 19
             //});
 
             return View(await _adsServices.GetAllAsync());

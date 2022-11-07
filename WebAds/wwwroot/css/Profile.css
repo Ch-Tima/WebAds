@@ -1,0 +1,29 @@
+﻿.MainContener {
+    display: flex;
+    justify-content: center;
+}
+
+.Icon {
+    margin-right: 20px;
+}
+
+.Icon a {
+    position: absolute;
+    margin: 60px 0 0 -30px;
+}
+
+.UserIcon {
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+}
+
+
+.EditIcon {
+    width: 32px;
+    height: 32px;
+}
+
+.RightData {
+    margin-left: 20px;
+}

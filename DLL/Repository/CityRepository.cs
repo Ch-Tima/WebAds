@@ -6,7 +6,7 @@ using System.Linq.Expressions;
 
 namespace DLL.Repository
 {
-    public class CityRepository : IGenericRepository<City>
+    public class CityRepository : IGenericRepository<City, int>
     {
         private readonly AdDbContext _dbContext;
         public CityRepository(AdDbContext context)

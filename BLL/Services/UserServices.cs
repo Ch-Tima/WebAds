@@ -2,6 +2,9 @@
 using DLL.Repository;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Globalization;
+using System.Numerics;
 
 namespace BLL.Services
 {
@@ -21,15 +24,18 @@ namespace BLL.Services
             return await _userRepository.GetAllAsync();
         }
 
-        public async Task<User> GetAsync(int id, bool fullLoad = false)
+        public async Task<User> GetAsync(string id, bool fullLoad = false)
         {
-            if(fullLoad)
+            if (fullLoad)
                 return await _userRepository.GetAsync(id);
             else
                 return await _userRepository.GetOnlyAsync(id);
             
         }
-        public async Task<bool> RemoveAsync(int id)
+
+
+
+        public async Task<bool> RemoveAsync(string id)
         {
             return await _userRepository.RemoveAsync(id);
         }

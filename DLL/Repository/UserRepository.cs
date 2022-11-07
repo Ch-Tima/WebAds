@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace DLL.Repository
 {
-    public class UserRepository : IGenericRepository<User>
+    public class UserRepository : IGenericRepository<User, string>
     {
         private readonly AdDbContext _dbContext;
         public UserRepository(AdDbContext context)
@@ -29,15 +29,16 @@ namespace DLL.Repository
             return await _dbContext.Users.ToListAsync();
         }
 
-        public async Task<User> GetAsync(int id)
+
+        public async Task<User> GetAsync(string id)
         {
-            return await _dbContext.Users.Include(x => x.Ads).FirstOrDefaultAsync(x => x.Id == id.ToString());
+            return await _dbContext.Users.Include(x => x.Ads).FirstOrDefaultAsync(x => x.Id == id);
         }
-        public async Task<User> GetOnlyAsync(int id)
+        public async Task<User> GetOnlyAsync(string id)
         {
-            return await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id.ToString());
+            return await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
-        public async Task<bool> RemoveAsync(int id)
+        public async Task<bool> RemoveAsync(string id)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id.ToString());
 
