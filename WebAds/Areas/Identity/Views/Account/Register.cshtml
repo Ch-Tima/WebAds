@@ -11,6 +11,7 @@
 
 
     <div class="MainContext">
+        <p style="text-align:center;">Register</p>
         <form id="regForm" action="~/Identity/Account/Register" method="post" enctype="multipart/form-data">
             <input type="email" placeholder="n@gmail.com" name="Email" required />
 
@@ -31,14 +32,15 @@
             <input type="hidden" value="false" id="IsMailing" name="IsMailing" />
 
             <button type="button" id="btnRegister">Register</button>
+            <a href="../../Identity/Account/Login" style="text-align: center;">LogIn</a>
             @Html.AntiForgeryToken()
         </form>
         @{
             if (Model != null){
-                    <p style="color:red;">@Model</p>
+                        <p style="color:red;">@Model</p>
             }
             else{
-                    <p id="ErrorP" style="color:red;"></p>
+                        <p id="ErrorP" style="color:red;"></p>
             }
         }
     </div>
@@ -48,7 +50,6 @@
     <script>
         $(function () {
             GetCity();
-            console.log("mailing");
             $("#mailing").on("click", function () {
                 if (this.checked == "on") {
                     $("#IsMailing").val(false);
@@ -57,7 +58,6 @@
                     $("#IsMailing").val(true);
                 }
             });
-            console.log("btnRegister");
             $("#btnRegister").on("click", function () {
                 if ($("#pasConfirm").val() == $("#pas").val())
                 {
@@ -69,7 +69,6 @@
                     $("#ErrorP").text("ConfirmPassword is incorrect!");
                 }
             });
-
         });
     </script>
 
