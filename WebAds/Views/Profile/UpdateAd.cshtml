@@ -1,7 +1,4 @@
 ﻿@model Ad
-@{
-
-}
 
 <div class="MainContext">
 
@@ -23,7 +20,6 @@
             <div class="City" style="margin-right:5px;">
                 <label>listCity</label>
                 <select id="listCity">
-                    <option value="@Model.CityId" selected>@Model.City.Name</option>
                 </select>
             </div>
             <div class="Category" style="margin-left:5px;">
@@ -48,7 +44,7 @@
     <script>
         $(function () {
 
-            GetCity();
+            GetCity('@Model.City.Name');
             GetCategory();
 
             $("#btnUpdate").on("click", UpdateAd);

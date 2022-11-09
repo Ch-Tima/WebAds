@@ -34,14 +34,39 @@ function GetAd() {
 
 }
 
+function AddAd(data)
+{
+    for (var i = 0; i < data.length; i++) {
+        $("#listAd").append('<form class="InputPageMovie" method="get" action="../Home/AdDetails">' +
+            '<input type="hidden" name="id" value="' + data[i].id + '"/>' +
+            '<div class="Ad" onclick="this.parentNode.submit();"> <img src="' + data[i].pathImg + '" style="width: 80px;">' +
+            '<div class="AddContent"> <h4 style="margin: auto;">' + data[i].name + '</h4>' +
+            '<p style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;font-size: 12px;">' + data[i].content + '</p>' +
+            '</div>' +
+            '<p style="color: forestgreen; font-size: 16px;">' + data[i].price + '$</p>' +
+            '</div>' +
+            '</form>');
+
+    }
+}
+
+
 //Get City
 function GetCity() {
     $.ajax({
         url: "../../api/ApiCity",
         type: "GET",
         success: function (data) {
+            console.log(data);
+            $("#listAd").text("");//Clear ListAd
             for (var i = 0; i < data.length; i++) {
-                $("#listCity").append('<li><a val="' + data[i].id + '">' + data[i].name + '</a></li>')
+                
+
+                if (data[i].ads.length > 0) {
+                    $("#listCity").append('<li><a val="' + data[i].id + '">' + data[i].name + '</a></li>');
+                    AddAd(data[i].ads);
+                }
+
             }
             $("div[class='ListCity']").find("a").on("click", function () {
                 idCity = $(this).attr("val");

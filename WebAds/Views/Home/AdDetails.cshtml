@@ -2,48 +2,45 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<Domain.Models.User> SignInManager
 @inject UserManager<Domain.Models.User> UserManager
-@{
-
-}
-
 
 <input type="hidden" id="AdId" value="@Model.Id" />
-
-
-
-
-
-<div class="MainContext">
-    <div class="SideLeft">
-        <div class="Icon">
-            <img src="@Model.PathImg">
+<div>
+  
+    <div class="MainContext">
+        <div class="SideLeft">
+            <img class="Icon" src="@Model.PathImg">
         </div>
-        <hr />
-        <div class="Discription">
-            <label>Content:</label>
-            <p>@Model.Content</p>
+        <div class="SideRight">
+            <p>Ad data:</p>
+            <p>Title:@Model.Name</p>
+            <p>Price:@Model.Price</p>
+            <p>City: @Model.City.Name</p>
+
+            <hr />
+
+            <p>User data:</p>
+            <label>UserName:</label>
+            <p>@Model.User.UserName</p>
+
+            <label>PhoneNumber:</label>
+            <p>@Model.User.PhoneNumber</p>
+
+            <a href="~/Profile/Index/@Model.UserId">User Profile</a>
         </div>
     </div>
-    <div class="SideRight">
-        <label>Name:</label>
-        <p>@Model.Name</p>
 
-        <label>Price:</label>
-        <p>@Model.Price</p>
+    <hr />
 
-        <label>City:</label>
-        <p>Name: @Model.City.Name</p>
-        <p>Region: @Model.City.Region</p>
-
-        <a href="~/Profile/Index/@Model.UserId">User Profile</a>
-        
+    <div class="Discription">
+        <label>Content:</label>
+        <p>@Model.Content</p>
     </div>
 </div>
-
 
 @{
     if (SignInManager.IsSignedIn(User))
     {
+    <hr />
     <div>
                     <textarea id="commentText"></textarea>
                     <button id="btnAddComment" disabled>AddComment</button>
@@ -66,9 +63,6 @@
             Get();
 
             $("#commentText").on("input", function () {
-
-                console.log($("#commentText").val().length > 0);
-
                 if ($("#commentText").val().length > 0) {
                     $("#btnAddComment").removeAttr("disabled");
                 }
@@ -86,13 +80,13 @@
 
         function Get() {
             $.ajax({
-                url: "../../api/Comment/" + $("#AdId").val(),
+                url: "../../api/ApiComment/" + $("#AdId").val(),
                 type: "GET",
                 success: function (data) {
-                    $("#listComment").html();
+                    $("#listComment").html("");
                     for (var i = 0; i < data.length; i++) {
                         $("#listComment").append("<div>" +
-                            "<p>User:" + data[i].userId + "</p>" +
+                            "<p>User:" + data[i].user.userName + "</p>" +
                             "<p>DateCreate:" + data[i].dateCreate + "</p>" +
                             "<p>Content:" + data[i].content + "</p>" +
                             "</div>");
@@ -104,19 +98,18 @@
             });
         }
         function Add() {
-            console.log("Add");
-
             var comment = new Object;
             comment.Content = $("#commentText").val();
             comment.AdId = $("#AdId").val();
 
             $.ajax({
-                url: "../../api/Comment",
+                url: "../../api/ApiComment",
                 type: "POST",
                 contentType: 'application/json',
                 data: JSON.stringify(comment),
                 success: function (data) {
-                    console.log(data);
+                    $("#commentText").val("");
+                    $("#btnAddComment").attr("disabled", "disabled");
                     Get();
                 },
                 error: function (err) {

@@ -40,13 +40,18 @@ function GetAds(arg) {
 }
 
 //Get City
-function GetCity() {
+function GetCity(selected = "") {
     $.ajax({
         url: "../../api/ApiCity",
         type: "GET",
         success: function (data) {
             for (var i = 0; i < data.length; i++) {
-                $("#listCity").append('<option value="' + data[i].id + '">' + data[i].name + '</option>')
+                if (selected == data[i].name) {
+                    $("#listCity").append('<option value="' + data[i].name + '" selected>' + data[i].name + '</option>')
+                }
+                else {
+                    $("#listCity").append('<option value="' + data[i].name + '">' + data[i].name + '</option>')
+                }
             }
         },
         error: function (error) {
@@ -100,7 +105,7 @@ function AddAd() {
     adForm.append("ad.Content", $("#Content").val());
     adForm.append("ad.Price", $("#Price").val());
 
-    adForm.append("ad.CityId", $("#listCity option:selected").val());
+    adForm.append("ad.CityName", $("#listCity option:selected").val());
     adForm.append("ad.CategotyId", $("#categotyId").val());
 
     adForm.append("upload", $("#AdImg")[0].files[0]);
