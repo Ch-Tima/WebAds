@@ -13,21 +13,20 @@
         <p>SingIn</p>
         <form action="~/Identity/Account/Login" method="post">
 
-            <input name="user.UserName" type="text" placeholder="UserName" required/>
-            <input name="user.PasswordHash" type="password" placeholder="password" required/>
+            <input name="UserName" type="text" placeholder="UserName" required />
+            <input name="Password" type="password" placeholder="password" required />
 
             <div class="Persistent">
                 <label>persistent:</label>
-                <input type="checkbox" id="persistent" />
-                <input type="hidden" value="false" id="isPersistent" name="isPersistent" />
+                <input type="checkbox" id="persistent" name="isPersistent" value="false" />
             </div>
-
+            @Html.AntiForgeryToken()
             <input type="submit" value="Login" />
         </form>
         @{
             if (Model != null)
             {
-               <p style="color:red;">@Model</p>
+                   <p style="color:red;">@Model</p>
             }
         }
     </div>
@@ -38,11 +37,11 @@
     <script>
         $(function () {
             $("#persistent").on("click", function () {
-                if (this.checked == "on") {
-                    $("#isPersistent").val(false);
+                if ($(this).val() == "false") {
+                    $("#persistent").val(true);
                 }
                 else {
-                    $("#isPersistent").val(true);
+                    $("#persistent").val(false);
                 }
             });
         });

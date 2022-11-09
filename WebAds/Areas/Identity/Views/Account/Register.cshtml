@@ -12,37 +12,42 @@
 
     <div class="MainContext">
         <form id="regForm" action="~/Identity/Account/Register" method="post" enctype="multipart/form-data">
-            <input type="email" value="logologi417@gmail.com" placeholder="n@gmail.com" name="Email" required />
+            <input type="email" placeholder="n@gmail.com" name="Email" required />
 
-            <input type="text" value="log417" placeholder="Name" name="UserName" required />
-            <input type="text" value="logi" placeholder="Surname" name="Surname" required />
+            <input type="text" placeholder="Name" name="Name" required />
+            <input type="text" placeholder="Surname" name="Surname" required />
 
-            <input type="text" value="417" placeholder="Address" name="Address" required />
-            <input type="tel" value="000417" placeholder="PhoneNumber" name="NumberPhone" required />
+            <label>listCity</label>
+            <select id="listCity" name="CityName" required>
+            </select>
 
-            <input type="password" id="pas" value="logologi417" placeholder="Password" name="PasswordHash" />
-            <input type="password" id="pasConfirm" value="logologi417" placeholder="ConfirmPassword" name="PasswordHash" />
+            <input type="tel" placeholder="PhoneNumber" name="PhoneNumber" required />
+
+            <input type="password" id="pas" placeholder="Password" name="Password" />
+            <input type="password" id="pasConfirm" placeholder="ConfirmPassword" name="PasswordHash" />
 
             <input type="checkbox" id="mailing" />
             <label>Send messages email:</label>
             <input type="hidden" value="false" id="IsMailing" name="IsMailing" />
 
             <button type="button" id="btnRegister">Register</button>
-
+            @Html.AntiForgeryToken()
         </form>
         @{
             if (Model != null){
-                <p style="color:red;">@Model</p>
+                    <p style="color:red;">@Model</p>
             }
             else{
-                <p id="ErrorP" style="color:red;"></p>
+                    <p id="ErrorP" style="color:red;"></p>
             }
         }
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/Profile/OperationOnAds.js"></script>
     <script>
         $(function () {
+            GetCity();
             console.log("mailing");
             $("#mailing").on("click", function () {
                 if (this.checked == "on") {
