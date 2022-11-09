@@ -1,20 +1,17 @@
 ﻿using BLL.Services;
 using Domain.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 
 namespace WebAds.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CommentController : ControllerBase
+    public class ApiCommentController : ControllerBase
     {
         private readonly CommentServices _commentServices;
         private readonly UserManager<User> _userManager;
-        public CommentController(CommentServices commentServices,
+        public ApiCommentController(CommentServices commentServices,
             UserManager<User> userManager)
         {
             _commentServices = commentServices;
@@ -23,7 +20,13 @@ namespace WebAds.Controllers
         [HttpGet("{id}")]
         public async Task<IEnumerable<Comment>> Get(int id)
         {
-            return await _commentServices.Find(x => x.AdId == id);
+            var result = await _commentServices.Find(x => x.AdId == id);
+
+            foreach (var item in result)
+                if (item.User != null)
+                    item.User.Comments = null;
+
+            return result;
         }
 
         [HttpPost]

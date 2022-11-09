@@ -68,6 +68,11 @@ namespace WebAds.Controllers
         {
             return View(await _userManager.GetUserAsync(User));
         }
+        [HttpPost]
+        public async Task<IActionResult> UpdateProfile(User user, IFormFile? file)
+        {
+            return BadRequest("Developing!");
+        }
 
     }
 }

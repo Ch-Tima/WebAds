@@ -1,8 +1,5 @@
 ﻿using BLL.Services;
-using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using WebAd.Models;
 
 namespace WebAd.Controllers
 {
@@ -22,101 +19,6 @@ namespace WebAd.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(int page = 0)
         {
-
-            //await _cityServices.AddAsync(new Domain.Models.City()
-            //{
-            //    Name = "Name_0A",
-            //    Region = "Region_A"
-            //});
-            //await _cityServices.AddAsync(new Domain.Models.City()
-            //{
-            //    Name = "Name_1A",
-            //    Region = "Region_A"
-            //});
-            //await _cityServices.AddAsync(new Domain.Models.City()
-            //{
-            //    Name = "Name_0B",
-            //    Region = "Region_B"
-            //});
-            //await _cityServices.AddAsync(new Domain.Models.City()
-            //{
-            //    Name = "Name_1B",
-            //    Region = "Region_B"
-            //});
-            //await _cityServices.AddAsync(new Domain.Models.City()
-            //{
-            //    Name = "Name_99X",
-            //    Region = "Region_X"
-            //});
-
-            //await _categoryServices.AddAsync(new Domain.Models.Category()
-            //{
-            //    Name = "Category_EE",
-
-            //});
-            //await _categoryServices.AddAsync(new Domain.Models.Category()
-            //{
-            //    Name = "Category_CC",
-            //});
-            //await _categoryServices.AddAsync(new Domain.Models.Category()
-            //{
-            //    Name = "Category_BB",
-            //});
-            //await _categoryServices.AddAsync(new Domain.Models.Category()
-            //{
-            //    Name = "Category_XX",
-            //});
-
-
-            //await _categoryServices.AddAsync(new Domain.Models.Category()
-            //{
-            //    Name = "Category_E1",
-            //    CategoryId = 11
-            //});
-            //await _categoryServices.AddAsync(new Domain.Models.Category()
-            //{
-            //    Name = "Category_E2",
-            //    CategoryId = 11
-            //});
-
-            //await _categoryServices.AddAsync(new Domain.Models.Category()
-            //{
-            //    Name = "Category_B1",
-            //    CategoryId = 13
-            //});
-
-            //await _categoryServices.AddAsync(new Domain.Models.Category()
-            //{
-            //    Name = "Category_B1_1",
-            //    CategoryId = 17
-            //});
-            //await _categoryServices.AddAsync(new Domain.Models.Category()
-            //{
-            //    Name = "Category_B1_2",
-            //    CategoryId = 17
-            //});
-            //await _categoryServices.AddAsync(new Domain.Models.Category()
-            //{
-            //    Name = "Category_B1_3",
-            //    CategoryId = 17
-            //});
-
-            //await _categoryServices.AddAsync(new Domain.Models.Category()
-            //{
-            //    Name = "Category_B1_2_A",
-            //    CategoryId = 19
-            //});
-            //await _categoryServices.AddAsync(new Domain.Models.Category()
-            //{
-            //    Name = "Category_B1_2_B",
-            //    CategoryId = 19
-            //});
-            //await _categoryServices.AddAsync(new Domain.Models.Category()
-            //{
-            //    Name = "Category_B1_2_C",
-            //    CategoryId = 19
-            //});
-
             return View(await _adsServices.GetAllAsync());
         }
         [HttpGet]

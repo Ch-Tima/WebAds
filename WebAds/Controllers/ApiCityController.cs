@@ -15,8 +15,14 @@ namespace WebAds.Controllers
         }
         [HttpGet]
         public async Task<IEnumerable<City>> Get()
-        {
-            return await _cityServices.GetAllAsync();
+        {  
+            var result = await _cityServices.GetAllAsync();
+            foreach (var item in result)
+                if(item.Ads.Count() > 0)
+                    foreach (var ad in item.Ads)
+                        ad.City = null;
+
+            return result;
         }
     }
 }

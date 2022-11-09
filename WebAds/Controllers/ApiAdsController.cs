@@ -38,20 +38,20 @@ namespace WebAd.Controllers
         /// Ad Filter
         /// </summary>
         /// <param name="idCategory">Category ID</param>
-        /// <param name="idCity">City ID</param>
+        /// <param name="cityName">City ID</param>
         /// <returns>Get IEnumerable&lt;Ad&gt;</returns>
         [HttpGet("{idCategory}/{idCity}")]
-        public async Task<IEnumerable<Ad>> FilterAd(int idCategory = -1, int idCity = -1)
+        public async Task<IEnumerable<Ad>> FilterAd(string? cityName, int idCategory = -1)
         {
             var res = new List<Ad>();
 
-            if (idCategory <= 0 && idCity <= 0)
+            if (idCategory <= 0 && cityName == null)
                 res.AddRange(await _AdServices.GetAllAsync());
             else
             {
 
-                if (idCity > 0 && idCategory <= 0)
-                    res.AddRange(await _AdServices.Find(x => x.CityId == idCity));
+                if (cityName != null && idCategory <= 0)
+                    res.AddRange(await _AdServices.Find(x => x.CityName == cityName));
                 else
                 {
                     var t = await _categoryServices.GetAsync(idCategory);
@@ -65,11 +65,11 @@ namespace WebAd.Controllers
                                 item.Categoty = null;
                         }
                     }
-                    if (idCity > 0)
+                    if (cityName != null)
                     {
                         foreach (var item in new List<Ad>(res))
                         {
-                            if (item.CityId != idCity)
+                            if (item.CityName != cityName)
                                 res.Remove(item);
                         }
                     }
@@ -116,7 +116,7 @@ namespace WebAd.Controllers
                 if (ad == null || upload == null)
                     throw new Exception("Ad or file equals null!");
 
-                if (ad.CategotyId <= 0 || ad.CityId <= 0)
+                if (ad.CategotyId <= 0 || ad.CityName == null)
                     throw new Exception("Incorrect parameter!");
 
 
@@ -128,7 +128,7 @@ namespace WebAd.Controllers
                 {
                     ad.PathImg = "/FilesDb/" + nameFile;
                     //Save Ad to db
-                    await _AdServices.AddAsync(ad, ad.CityId, ad.CategotyId);
+                    await _AdServices.AddAsync(ad, ad.CityName, ad.CategotyId);
                 }
 
                 return Ok("Ad has been added!");
