@@ -7,14 +7,14 @@ namespace Domain.Models
     {
         public string Surname { get; set; }
         public string IconPath { get; set; }
-        public string Address { get; set; }
+        
+        public string? CityName { get; set; }
+        public City City { get; set; }
 
 
         public bool IsMailing { get; set; }
 
         public List<Comment> Comments { get; set; }
         public List<Ad> Ads { get; set; }
-
-        //public List<UserRole> UserRoles { get; set; }
     }
 }

@@ -8,9 +8,12 @@ namespace Domain.Models
 {
     public class City
     {
-        public int Id { get; set; }
+        /// <summary>
+        /// Name - this is identifier "ID"
+        /// </summary>
         public string Name { get; set; }
         public string Region { get; set; }
         public List<Ad> Ads { get; set; }
+        public List<User> Users { get; set; }
     }
 }

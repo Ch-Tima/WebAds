@@ -19,7 +19,7 @@ namespace Domain.Models
         public bool IsTop { get; set; }
 
 
-        public int CityId { get; set; }
+        public string CityName { get; set; }
         public City? City { get; set; }
 
         public int CategotyId { get; set; }
