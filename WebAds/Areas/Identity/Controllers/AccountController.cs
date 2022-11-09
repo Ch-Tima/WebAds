@@ -1,22 +1,23 @@
-﻿using Domain.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Win32;
+using System.Text;
 using WebAds.Models;
+using Domain.Models;
 
 namespace WebAds.Areas.Identity.Controllers
 {
     [Area("Identity")]
     public class AccountController : Controller
-    {   
+    {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         private readonly IEmailSender _emailService;
 
-        public AccountController(SignInManager<User> manager, UserManager<User> userManager, 
+        public AccountController(SignInManager<User> manager, UserManager<User> userManager,
             RoleManager<IdentityRole> roleManager, IEmailSender emailService)
         {
             _signInManager = manager;
@@ -26,9 +27,8 @@ namespace WebAds.Areas.Identity.Controllers
             _emailService = emailService;
         }
 
-        public IActionResult Register() => View();
-        public IActionResult Login() => View();
 
+        public IActionResult Register() => View();
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model)
@@ -45,46 +45,85 @@ namespace WebAds.Areas.Identity.Controllers
             var result = await _userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
-                if(await _roleManager.FindByNameAsync("user") == null)
+                if (await _roleManager.FindByNameAsync("user") == null)
                     await _roleManager.CreateAsync(new IdentityRole("user"));
 
                 await _userManager.AddToRoleAsync(user, "user");
                 await _signInManager.SignInAsync(user, isPersistent: false);
 
-                var t1 = Request.Scheme;
-                var t2 = Request.Host.Value;
-
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var confirmLink = Url.Action("Confirm", "EmailConfirm", new { token = token, userEmail = user.Email }, Request.Scheme, Request.Host.Value + "/Identity");
 
-                var link = $"<lable>Please click the link for confirm Email address:</lable><a href='{confirmLink}'>Confirm Email</a>";
+                var msgHtml = $"<lable>Please click the link for confirm Email address:</lable><a href='{confirmLink}'>Confirm Email</a>";
 
-                await _emailService.SendEmailAsync(user.Email, "Confirmation Email(WebAd)", link);
+                await _emailService.SendEmailAsync(user.Email, "Confirmation Email(WebAd)", msgHtml);
 
                 return RedirectToAction("Index", "Home");
             }
-            
+
             return View(nameof(Register), result.Errors.First().Description);
         }
 
+
+        public IActionResult Login() => View();
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
-                
                 var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.IsPersistent, false);
                 if (result.Succeeded)
-                {
                     return RedirectToAction("Index", "Home");
-                }
                 else
-                {
                     return View(nameof(Login), "User not found!");
-                }
             }
             return View(nameof(Login), "Error!");
+        }
+
+
+        public IActionResult ForgotPassword() => View();
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null && await _userManager.IsEmailConfirmedAsync(user))
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+
+                var link = Url.Action("ResetPassword", "Account", new { token = token, email = email }, Request.Scheme, Request.Host.Value + "/Identity");
+
+                await _emailService.SendEmailAsync(email, "Reset Password(WebAds)", $"<a href='{link}'>Confirm Email</a>");
+
+                return View(model: "Please, check email!");
+            }
+            return View(model: "Not found user!");
+        }
+
+
+        public IActionResult ResetPassword(string email, string token)
+        {
+            return View(model: new ResetPasswordViewModel()
+            {
+                Email = email,
+                Token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(token))
+            });
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            var user = await _userManager.FindByEmailAsync(model.Email);
+
+            if (user != null)
+            {
+                var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+
+                if (result.Succeeded)
+                    return View(nameof(Login));
+            }
+
+            return View(nameof(Register));
         }
 
         [HttpGet]
