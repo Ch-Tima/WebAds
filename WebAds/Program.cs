@@ -3,9 +3,6 @@ using BLL.Infrastructure;
 using Domain.Models;
 using Azure.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using System.Configuration;
-using Microsoft.Extensions.Configuration;
-using Microsoft.CodeAnalysis.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,21 +20,19 @@ builder.Services.AddTransient<AdsServices>();
 builder.Services.AddTransient<CityServices>();
 builder.Services.AddTransient<CommentServices>();
 builder.Services.AddTransient<CategoryServices>();
+
 builder.Services.AddTransient<IEmailSender, SendGridEmailService>();//SendGrid
 
 //Set SendGridEmailSenderOption
-builder.Services.Configure<SendGridEmailSenderOption>("SendGridEmail", opt =>
+builder.Services.Configure<SendGridEmailSenderOption>(opt =>
 {
-    opt.ApiKey = builder.Configuration["SenderGrid:ApiKey"];
+    opt.ApiKey = builder.Configuration.GetValue<string>("SGKey");
     opt.SenderEmail = builder.Configuration["SenderGrid:SenderEmail"];
     opt.SenderName = builder.Configuration["SenderGrid:SenderName"];
 });
 
 
 builder.Services.Configure(builder.Configuration);
-
-
-
 
 //Add Swagger
 builder.Services.AddSwaggerGen(x =>
