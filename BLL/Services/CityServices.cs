@@ -1,10 +1,5 @@
 ﻿using DLL.Repository;
 using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Services
 {
@@ -24,13 +19,13 @@ namespace BLL.Services
             return await _cityRepository.GetAllAsync();
         }
 
-        public async Task<City> GetAsync(int id)
+        public async Task<City> GetAsync(string name)
         {
-            return await _cityRepository.GetAsync(id);
+            return await _cityRepository.GetAsync(name);
         }
-        public async Task<bool> RemoveAsync(int id)
+        public async Task<bool> RemoveAsync(string name)
         {
-            return await _cityRepository.RemoveAsync(id);
+            return await _cityRepository.RemoveAsync(name);
         }
 
         public async Task UpdateAsync(City entity)

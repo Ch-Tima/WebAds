@@ -26,7 +26,9 @@ namespace DLL.Repository
 
         public async Task<IEnumerable<Comment>> Find(Expression<Func<Comment, bool>> expression)
         {
-            return await _dbContext.Comments.Where(expression).ToListAsync();
+            return await _dbContext.Comments
+                .Include(x => x.User)
+                .Where(expression).ToListAsync();
         }
 
         public async Task<IEnumerable<Comment>> GetAllAsync()

@@ -12,9 +12,9 @@ namespace BLL.Services
         {
             _AdRepository = AdRepository;
         }
-        public async Task AddAsync(Ad entity, int cityId, int categoryId)
+        public async Task AddAsync(Ad entity, string cityName, int categoryId)
         {
-            entity.CityId = cityId;
+            entity.CityName = cityName;
             entity.CategotyId = categoryId;
 
             await _AdRepository.AddAsync(entity);

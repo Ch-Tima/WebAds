@@ -92,7 +92,7 @@ namespace DLL.Repository
                 ad.Price = entity.Price > 0.0M ? entity.Price : ad.Price;
                 
 
-                ad.CityId = entity.CityId > 0 ? entity.CityId : ad.CityId;
+                ad.CityName = entity.CityName != null ? entity.CityName : ad.CityName;
                 ad.CategotyId = entity.CategotyId > 0 ? entity.CategotyId : ad.CategotyId;
 
                 await _dbContext.SaveChangesAsync();

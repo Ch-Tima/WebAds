@@ -8,7 +8,6 @@ namespace DLL.Context
     {
         public AdDbContext(DbContextOptions<AdDbContext> options) : base(options)
         {
-            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -23,20 +22,21 @@ namespace DLL.Context
             modelBuilder.Entity<Ad>().Property(x => x.Price).IsRequired().HasColumnType("decimal").HasPrecision(9, 2);
             modelBuilder.Entity<Ad>().Property(x => x.IsVerified).IsRequired().HasColumnType("bit").HasDefaultValue(false);
             modelBuilder.Entity<Ad>().Property(x => x.IsTop).IsRequired().HasColumnType("bit").HasDefaultValue(false);
-
             //CityId OneToMany
-            modelBuilder.Entity<Ad>().HasOne(x => x.City).WithMany(x => x.Ads).HasForeignKey(x => x.CityId);
+            modelBuilder.Entity<Ad>().HasOne(x => x.City).WithMany(x => x.Ads).HasForeignKey(x => x.CityName);
             //CategotyId OneToMany
             modelBuilder.Entity<Ad>().HasOne(x => x.Categoty).WithMany(x => x.Ads).HasForeignKey(x => x.CategotyId);
             //UserId OneToMany
-            modelBuilder.Entity<Ad>().HasOne(x => x.User).WithMany(x => x.Ads).HasForeignKey(x => x.UserId);
+            modelBuilder.Entity<Ad>().HasOne(x => x.User).WithMany(x => x.Ads).HasForeignKey(x => x.UserId).IsRequired();
 
 
             //User
             modelBuilder.Entity<User>().Property(x => x.Surname).IsRequired().HasColumnType("varchar").HasMaxLength(100);
-            modelBuilder.Entity<User>().Property(x => x.Address).IsRequired().HasColumnType("varchar").HasMaxLength(100);
             modelBuilder.Entity<User>().Property(x => x.IsMailing).IsRequired().HasColumnType("bit").HasDefaultValue(false);
             modelBuilder.Entity<User>().Property(x => x.IconPath).IsRequired().HasColumnType("varchar").HasMaxLength(225).HasDefaultValue("img/defUser.png");
+            //CityName OneToMany
+            modelBuilder.Entity<User>().HasOne(x => x.City).WithMany(x => x.Users).HasForeignKey(x => x.CityName).OnDelete(DeleteBehavior.ClientNoAction);
+
 
             //Categoty
             modelBuilder.Entity<Category>().HasIndex(x => x.Id).IsUnique();
@@ -45,9 +45,9 @@ namespace DLL.Context
 
 
             //City
-            modelBuilder.Entity<City>().HasIndex(x => x.Id).IsUnique();
-            modelBuilder.Entity<City>().Property(x => x.Name).IsRequired().HasColumnType("varchar").HasMaxLength(100);
+            modelBuilder.Entity<City>().HasKey(x => x.Name);
             modelBuilder.Entity<City>().Property(x => x.Region).IsRequired().HasColumnType("varchar").HasMaxLength(100);
+
 
             //Comment
             modelBuilder.Entity<Comment>().HasIndex(x => x.Id).IsUnique();
@@ -58,22 +58,11 @@ namespace DLL.Context
             //User -> Comments OneToMany
             modelBuilder.Entity<Comment>().HasOne(x => x.User).WithMany(x => x.Comments).HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
 
-
-            //UserRole Many to Many
-            //modelBuilder.Entity<UserRole>().HasKey(x => new { x.RoleId, x.UserId });
-            //modelBuilder.Entity<UserRole>().HasOne(x => x.Role).WithMany(x => x.UserRoles).HasForeignKey(x => x.RoleId);
-            //modelBuilder.Entity<UserRole>().HasOne(x => x.User).WithMany(x => x.UserRoles).HasForeignKey(x => x.UserId);
-
-
         }
         public DbSet<Ad> Ads { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Comment> Comments { get; set; }
-
-        //public DbSet<Role> Roles { get; set; }
-        //public DbSet<UserRole> UserRoles { get; set; }
-
     }
 }

@@ -3,10 +3,11 @@ using DLL.Context;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Xml.Linq;
 
 namespace DLL.Repository
 {
-    public class CityRepository : IGenericRepository<City, int>
+    public class CityRepository : IGenericRepository<City, string>
     {
         private readonly AdDbContext _dbContext;
         public CityRepository(AdDbContext context)
@@ -26,15 +27,17 @@ namespace DLL.Repository
 
         public async Task<IEnumerable<City>> GetAllAsync()
         {
-            return await _dbContext.Cities.ToListAsync();
+            return await _dbContext.Cities
+                .Include(x => x.Ads)
+                .ToListAsync();
         }
-        public async Task<City> GetAsync(int id)
+        public async Task<City> GetAsync(string name)
         {
-            return await _dbContext.Cities.Include(x => x.Ads).FirstOrDefaultAsync(x => x.Id == id);
+            return await _dbContext.Cities.Include(x => x.Ads).FirstOrDefaultAsync(x => x.Name == name);
         }
-        public async Task<bool> RemoveAsync(int id)
+        public async Task<bool> RemoveAsync(string name)
         {
-            var city = await _dbContext.Cities.FirstOrDefaultAsync(x => x.Id == id);
+            var city = await _dbContext.Cities.FirstOrDefaultAsync(x => x.Name == name);
 
             if (city != null)
             {
