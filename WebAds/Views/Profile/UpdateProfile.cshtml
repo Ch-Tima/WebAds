@@ -2,9 +2,10 @@
 @{
     ViewData["Title"] = Model.UserName;
 }
-<h3>In developing</h3>
 
 <form asp-action="UpdateProfile" asp-controller="Profile" method="post" enctype="multipart/form-data">
+
+    <input type="hidden" value="@Model.Id" name="Id"/>
 
     <div style="display:inline-grid;">
 
@@ -15,13 +16,15 @@
 
 
         <label>Icon:</label>
-        <input type="file" accept="image/*" />
+        <input type="file" name="file" accept="image/*" />
 
         <label>listCity:</label>
-        <select id="listCity">
+        <select name="CityName" id="listCity">
         </select>
 
-        <label>Condent to send Emails: <input type="checkbox" asp-for="@Model.IsMailing" /></label>
+        <label>
+            Condent to send Emails: <input type="checkbox" id="mailing" value="@Model.IsMailing" name="IsMailing" />
+        </label>
        
 
         <button type="submit">Save</button>
@@ -35,6 +38,18 @@
     <script>
         $(function () {
             GetCity('@Model.CityName');
+            $("#mailing").prop('checked', @Model.IsMailing.ToString().ToLower());
+
+        });
+        $("#mailing").on("click", function () {
+            if ($(this).val() == "false") {
+                $("#mailing").val(true);
+                $("#mailing").prop('checked', true);
+            }
+            else {
+                $("#mailing").val(false);
+                $("#mailing").prop('checked', false);
+            }
         });
     </script>
 }

@@ -3,7 +3,7 @@ using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-
+using WebAds.Helpers;
 
 namespace WebAds.Controllers
 {
@@ -14,21 +14,22 @@ namespace WebAds.Controllers
         private readonly AdsServices _adsServices;
         private readonly UserServices _userServices;
 
+        private readonly IWebHostEnvironment _appEnvironment;
+
         public ProfileController(UserManager<User> userManager,
             AdsServices adsServices,
-            UserServices userServices)
+            UserServices userServices,
+            IWebHostEnvironment appEnvironment)
         {
             _userManager = userManager;
             _adsServices = adsServices;
             _userServices = userServices;
+            _appEnvironment = appEnvironment;
         }
 
         public async Task<IActionResult> Index()
         {
             ViewBag.IsPublicProfile = false;
-
-            var user = await _userManager.GetUserAsync(User);
-
             return View(await _userManager.GetUserAsync(User));
         }
 
@@ -55,23 +56,45 @@ namespace WebAds.Controllers
             var user = await _userManager.GetUserAsync(User);
 
             var ad = (List<Ad>)await _adsServices.Find(x => x.Id == idAd && x.UserId == user.Id, true);
-            if(ad != null && ad.Count() > 0)
+            if (ad != null && ad.Count() > 0)
                 return View(ad[0]);
 
             return Redirect("~/Profile");
         }
-        /// <summary>
-        /// Developing!
-        /// </summary>
-        /// <returns></returns>
+
         public async Task<IActionResult> UpdateProfile()
         {
             return View(await _userManager.GetUserAsync(User));
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateProfile(User user, IFormFile? file)
+        public async Task<IActionResult> UpdateProfile(User model, IFormFile? file)
         {
-            return BadRequest("Developing!");
+            try
+            {
+                var user = await _userManager.GetUserAsync(User);
+
+                user.UserName = model.UserName;
+                user.Surname = model.Surname;
+                user.IsMailing = model.IsMailing;
+
+                if (file != null)
+                {
+                    string filePathDb = "/FilesDb/" + FilesHelper.RandomName() + ".png";
+                    if (await file.SaveFile( _appEnvironment.WebRootPath + filePathDb))
+                    {
+                        FilesHelper.DeleteFile(user.IconPath);
+                        user.IconPath = filePathDb;
+                    }
+                }
+
+                await _userManager.UpdateAsync(user);
+
+                return Redirect(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                return Json(ex.Message);
+            }
         }
 
     }

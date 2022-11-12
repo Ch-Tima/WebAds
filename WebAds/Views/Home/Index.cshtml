@@ -20,7 +20,7 @@
     <div class="ListCategory">
         <ul class='Nav'>
             <li>
-                <a id="categoryName">Category</a>
+                <a id="categoryName" val="-1">Category</a>
                 <ul id="n0">
                     <li><a val="-1">AllCategory</a></li>
                 </ul>
@@ -32,7 +32,7 @@
             <li>
                 <a id="cityName">City</a>
                 <ul id="listCity">
-                    <li><a val="-1">AllCity</a></li>
+                    <li><a val="">AllCity</a></li>
                 </ul>
             </li>
         </ul>
@@ -42,23 +42,6 @@
 <div class="MainContener">
 
     <div id="listAd" class="ListAd">
-
-       @* @{
-            foreach (var item in Model)
-            {
-                <form class="InputPageMovie" method="get" action="@Url.Action("AdDetails", "Home")">
-                    <input type="hidden" name="id" value='@item.Id' />
-                    <div class="Ad" onclick="this.parentNode.submit();">
-                        <img src="@item.PathImg" style="width: 80px;">
-                        <div class="AddContent">
-                            <h4 style="margin: auto;">@item.Name</h4>
-                            <p style="overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-line-clamp: 3;-webkit-box-orient: vertical;font-size: 12px;">@item.Content</p>
-                        </div>
-                        <p style="color: forestgreen; font-size: 16px;">@item.Price $</p>
-                    </div>
-                </form>
-            }
-        }*@
 
     </div>
 

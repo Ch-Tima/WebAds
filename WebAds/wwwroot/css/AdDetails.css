@@ -14,6 +14,16 @@
     background-color: #f6f6f6;
     padding: 5px;
 }
+.CommentBox {
+    width: 380px;
+    background: aquamarine;
+    margin: 8px 5px;
+}
+
+.CommentData {
+    display: flex;
+    justify-content: space-around;
+}
 
 @media (max-width: 700px) {
     .Icon img {

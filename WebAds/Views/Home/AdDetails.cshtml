@@ -42,8 +42,8 @@
     {
     <hr />
     <div>
-                    <textarea id="commentText"></textarea>
-                    <button id="btnAddComment" disabled>AddComment</button>
+                        <textarea id="commentText"></textarea>
+                        <button id="btnAddComment" disabled>AddComment</button>
     </div>
     }
 }
@@ -54,14 +54,10 @@
 @section Styles{
     <link rel="stylesheet" href="~/css/AdDetails.css" asp-append-version="true" />
 }
-
-
     @section Scripts{
     <script>
         $(function () {
-
             Get();
-
             $("#commentText").on("input", function () {
                 if ($("#commentText").val().length > 0) {
                     $("#btnAddComment").removeAttr("disabled");
@@ -69,15 +65,11 @@
                 else {
                     $("#btnAddComment").attr("disabled", "disabled")
                 }
-
             });
-
             $("#btnAddComment").on("click", function () {
                 Add();
             });
-
         });
-
         function Get() {
             $.ajax({
                 url: "../../api/ApiComment/" + $("#AdId").val(),
@@ -85,9 +77,11 @@
                 success: function (data) {
                     $("#listComment").html("");
                     for (var i = 0; i < data.length; i++) {
-                        $("#listComment").append("<div>" +
+                        $("#listComment").append("<div class='CommentBox'>" +
+                            "<div class='CommentData'>" +
                             "<p>User:" + data[i].user.userName + "</p>" +
                             "<p>DateCreate:" + data[i].dateCreate + "</p>" +
+                            "</div>"+
                             "<p>Content:" + data[i].content + "</p>" +
                             "</div>");
                     }
@@ -101,7 +95,6 @@
             var comment = new Object;
             comment.Content = $("#commentText").val();
             comment.AdId = $("#AdId").val();
-
             $.ajax({
                 url: "../../api/ApiComment",
                 type: "POST",
@@ -117,6 +110,5 @@
                 }
             });
         }
-
     </script>
 }

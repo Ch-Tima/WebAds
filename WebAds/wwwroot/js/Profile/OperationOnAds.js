@@ -1,5 +1,5 @@
 ﻿//Get userAds
-function GetAds(arg) {
+function GetUserAds(isPublic) {
     $.ajax({
         url: "../../api/ApiAds",
         type: "GET",
@@ -16,7 +16,7 @@ function GetAds(arg) {
                     '<img src="' + data[i].pathImg + '" style="width: 80px;">';
 
 
-                if (arg) {
+                if (isPublic) {
                     tempString += '<button type="button" class="btnRemove" value="' + data[i].id + '">Remove</button>' +
                         '<form method="post" action="../../Profile/UpdateAd">' +
                         '<input type="hidden" value="' + data[i].id + '" name="idAd" />' +
@@ -99,31 +99,36 @@ function SetFilter(arg, n) {
 //Add
 function AddAd() {
 
-    var adForm = new FormData();
+    if ($("#Name").val().length == 0 || $("#Content").val() == 0 || $("#categotyId").val() == -1 || $("#AdImg")[0].files[0] == null) {
+        alert("There are empty fields!");
+    }
+    else {
+        var adForm = new FormData();
 
-    adForm.append("ad.Name", $("#Name").val());
-    adForm.append("ad.Content", $("#Content").val());
-    adForm.append("ad.Price", $("#Price").val());
+        adForm.append("ad.Name", $("#Name").val());
+        adForm.append("ad.Content", $("#Content").val());
+        adForm.append("ad.Price", $("#Price").val());
 
-    adForm.append("ad.CityName", $("#listCity option:selected").val());
-    adForm.append("ad.CategotyId", $("#categotyId").val());
+        adForm.append("ad.CityName", $("#listCity option:selected").val());
+        adForm.append("ad.CategotyId", $("#categotyId").val());
 
-    adForm.append("upload", $("#AdImg")[0].files[0]);
+        adForm.append("upload", $("#AdImg")[0].files[0]);
 
-    $.ajax({
-        url: "../../api/ApiAds",
-        type: "PUT",
-        contentType: false,
-        processData: false,
-        data: adForm,
-        success: function (data) {
-            alert(data);
-            window.location.replace("../Profile")
-        },
-        error: function (error) {
-            console.log(error);
-        }
-    });
+        $.ajax({
+            url: "../../api/ApiAds",
+            type: "PUT",
+            contentType: false,
+            processData: false,
+            data: adForm,
+            success: function (data) {
+                alert(data);
+                window.location.replace("../Profile")
+            },
+            error: function (error) {
+                console.log(error);
+            }
+        });
+    }
 }
 
 //Remove
@@ -136,7 +141,7 @@ function RemoveAd(idAd) {
             alert(data);
         },
         error: function (err) {
-            console.log(err);
+            alert(err);
         }
     });
 }
@@ -149,7 +154,7 @@ function UpdateAd() {
     newAd.append("ad.Content", $("#Content").val());
     newAd.append("ad.Price", $("#Price").val());
 
-    newAd.append("ad.CityId", $("#listCity option:selected").val());
+    newAd.append("ad.CityName", $("#listCity option:selected").val());
     newAd.append("ad.CategotyId", $("#categotyId").val());
 
 
@@ -172,4 +177,10 @@ function UpdateAd() {
             console.log(error);
         }
     });
+}
+
+function MsgBox(title, msg) {
+    $("body").append("<div id='msgBox' style='width: 150px; height: 125px; background-color: red; position: absolute;margin-left: auto; margin-right: auto;left: 0;right: 0;'>"
+        + "<lable style='color: white;'>" + title + "</lable>"
+        + "<p style='color: white;font-size: 17px; text-align:center;'>" + msg + "</p></div>");
 }

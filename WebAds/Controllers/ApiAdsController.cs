@@ -1,14 +1,15 @@
 ﻿using BLL.Services;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
-using System.Text;
+using WebAds.Helpers;
 
 namespace WebAd.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ApiAdsController : ControllerBase
     {
         private readonly AdsServices _AdServices;
@@ -28,7 +29,9 @@ namespace WebAd.Controllers
             _appEnvironment = appEnvironment;
             _categoryServices = categoryServices;
         }
+
         [HttpGet]
+        [AllowAnonymous]
         public async Task<IEnumerable<Ad>> GetAdUser(string userId)
         {
             return await _AdServices.Find(x => x.UserId == userId);
@@ -40,7 +43,8 @@ namespace WebAd.Controllers
         /// <param name="idCategory">Category ID</param>
         /// <param name="cityName">City ID</param>
         /// <returns>Get IEnumerable&lt;Ad&gt;</returns>
-        [HttpGet("{idCategory}/{idCity}")]
+        [AllowAnonymous]
+        [HttpGet("{idCategory}/{cityName?}")]
         public async Task<IEnumerable<Ad>> FilterAd(string? cityName, int idCategory = -1)
         {
             var res = new List<Ad>();
@@ -73,11 +77,8 @@ namespace WebAd.Controllers
                                 res.Remove(item);
                         }
                     }
-
                 }
-
             }
-
             return res;
         }
         /// <summary>
@@ -110,23 +111,16 @@ namespace WebAd.Controllers
             {
                 var user = await _userManager.GetUserAsync(User);
 
-                if (user == null)
-                    throw new Exception("Please LogIn to your account!");
-
-                if (ad == null || upload == null)
-                    throw new Exception("Ad or file equals null!");
-
-                if (ad.CategotyId <= 0 || ad.CityName == null)
-                    throw new Exception("Incorrect parameter!");
-
+                if (ad.CategotyId <= 0 || ad == null || upload == null)
+                    throw new Exception("Invalid parameter!");
 
                 ad.UserId = user.Id;//Set user ID
 
                 //Save Img
-                var nameFile = HashTime() + ".png";
-                if (await SaveFile(upload, nameFile))
+                string filePathDb = "/FilesDb/" + FilesHelper.RandomName() + ".png";
+                if (await upload.SaveFile(_appEnvironment.WebRootPath + filePathDb))
                 {
-                    ad.PathImg = "/FilesDb/" + nameFile;
+                    ad.PathImg = filePathDb;
                     //Save Ad to db
                     await _AdServices.AddAsync(ad, ad.CityName, ad.CategotyId);
                 }
@@ -144,11 +138,7 @@ namespace WebAd.Controllers
         {
             try
             {
-
                 var user = await _userManager.GetUserAsync(User);
-
-                if (user == null)
-                    throw new Exception("Please LogIn to your account!");
 
                 if (idAd < 1)
                         throw new Exception("Incorrect idAd");
@@ -165,8 +155,6 @@ namespace WebAd.Controllers
                 else
                     throw new Exception("Not found Ad!");
 
-
-
             }
             catch (Exception ex)
             {
@@ -179,18 +167,17 @@ namespace WebAd.Controllers
         {
             try
             {
-
                 if(upload != null)
                 {
-                    bool f = false;
                     if (ad.PathImg != null)
-                        f = DeleteFile(ad.PathImg);
+                        FilesHelper.DeleteFile(_appEnvironment.WebRootPath + ad.PathImg);
 
                     //Save Img
-                    var nameFile = HashTime() + ".png";
-                    if (await SaveFile(upload, nameFile))
+                    string filePathDb = "/FilesDb/" + FilesHelper.RandomName() + ".png";
+                    if (await upload.SaveFile(_appEnvironment.WebRootPath + filePathDb))
                     {
-                        ad.PathImg = "/FilesDb/" + nameFile;
+                        FilesHelper.DeleteFile(ad.PathImg);
+                        ad.PathImg = filePathDb;
                     }
                 }
 
@@ -204,56 +191,5 @@ namespace WebAd.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        private async Task<bool> SaveFile(IFormFile file, string newName)
-        {
-            try
-            {
-                if (file == null)
-                    return false;
-
-                string path = "/FilesDb/" + newName;
-
-                using (var fs = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
-                {
-                    await file.CopyToAsync(fs);
-                }
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-        private bool DeleteFile(string path)
-        {
-            try
-            {
-                System.IO.File.Delete(_appEnvironment.WebRootPath + path);
-                return true;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-        }
-        private string HashTime()
-        {
-            try
-            {
-                using (var sha = SHA256.Create())
-                {
-                    var hashBytes = sha.ComputeHash(Encoding.UTF8.GetBytes(DateTime.Now.ToString()));
-                    var hash = BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
-                    return hash;
-                }
-            }
-            catch (Exception ex)
-            {
-                return ex.Message;
-            }
-        }
-
     }
 }

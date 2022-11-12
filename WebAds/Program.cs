@@ -74,6 +74,5 @@ app.MapControllerRoute(
 app.MapAreaControllerRoute(
     name: "Identity",
     areaName: "Identity",
-    pattern: "Identity/{controller=Account}/{action=Register}");//Login
-
+    pattern: "Identity/{controller=Account}/{action=Register}");
 app.Run();

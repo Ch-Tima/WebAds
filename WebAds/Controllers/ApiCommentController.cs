@@ -1,5 +1,6 @@
 ﻿using BLL.Services;
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,6 +8,7 @@ namespace WebAds.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ApiCommentController : ControllerBase
     {
         private readonly CommentServices _commentServices;
@@ -17,6 +19,7 @@ namespace WebAds.Controllers
             _commentServices = commentServices;
             _userManager = userManager;
         }
+        [AllowAnonymous]
         [HttpGet("{id}")]
         public async Task<IEnumerable<Comment>> Get(int id)
         {

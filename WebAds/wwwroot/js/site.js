@@ -3,17 +3,12 @@
     GetCategory();
 });
 
-var idCategory = -1;
-var idCity = -1;
-
-function GetAd() {
-
+function FilterAd(idCategory = -1, cityName = "") {
     $.ajax({
-        url: "../api/ApiAds/" + (idCategory > 0 ? idCategory : -1) + "/" + (idCity > 0 ? idCity : -1),
+        url: "../api/ApiAds/" + (idCategory > 0 ? idCategory : -1) + "/" + (cityName.length > 0 ? cityName : ""),
         type: "GET",
         success: function (data) {
             $("#listAd").text("");
-
             for (var i = 0; i < data.length; i++) {
                 $("#listAd").append('<form class="InputPageMovie" method="get" action="../Home/AdDetails">' +
                     '<input type="hidden" name="id" value="' + data[i].id + '"/>' +
@@ -24,14 +19,12 @@ function GetAd() {
                     '<p style="color: forestgreen; font-size: 16px;">' + data[i].price + '$</p>' +
                     '</div>' +
                     '</form>');
-
             }
         },
         error: function (err) {
             console.log(err);
         }
     });
-
 }
 
 function AddAd(data)
@@ -50,28 +43,23 @@ function AddAd(data)
     }
 }
 
-
 //Get City
 function GetCity() {
     $.ajax({
         url: "../../api/ApiCity",
         type: "GET",
         success: function (data) {
-            console.log(data);
             $("#listAd").text("");//Clear ListAd
             for (var i = 0; i < data.length; i++) {
-                
-
                 if (data[i].ads.length > 0) {
-                    $("#listCity").append('<li><a val="' + data[i].id + '">' + data[i].name + '</a></li>');
+                    $("#listCity").append('<li><a val="' + data[i].name + '">' + data[i].name + '</a></li>');
                     AddAd(data[i].ads);
                 }
-
             }
             $("div[class='ListCity']").find("a").on("click", function () {
-                idCity = $(this).attr("val");
-                GetAd(idCategory, idCity);
                 $("#cityName").text($(this).text());
+                $("#cityName").attr("val", $(this).attr("val"));
+                FilterAd($("#categoryName").attr("val"), $("#cityName").attr("val"));
             });
         },
         error: function (error) {
@@ -87,9 +75,9 @@ function GetCategory() {
         success: function (data) {
             SetFilter(data, 0);
             $("div[class='ListCategory']").find("a").on("click", function () {
-                idCategory = $(this).attr("val");
-                GetAd(idCategory, idCity);
                 $("#categoryName").text($(this).text());
+                $("#categoryName").attr("val", $(this).attr("val"));
+                FilterAd($("#categoryName").attr("val"), $("#cityName").attr("val"));
             });
         },
         error: function (err) {
