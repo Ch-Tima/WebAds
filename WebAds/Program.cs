@@ -31,6 +31,12 @@ builder.Services.Configure<SendGridEmailSenderOption>(opt =>
     opt.SenderName = builder.Configuration["SenderGrid:SenderName"];
 });
 
+//Enable GoogleAuth
+builder.Services.AddAuthentication().AddGoogle(opt =>
+{
+    opt.ClientId = builder.Configuration["GoogleAuth:ClientId"];
+    opt.ClientSecret = builder.Configuration["GoogleAuth:ClientSecret"];
+});
 
 builder.Services.Configure(builder.Configuration);
 
@@ -68,11 +74,23 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
+    name: "defaultArea",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+//area:exists
 
 app.MapAreaControllerRoute(
     name: "Identity",
     areaName: "Identity",
     pattern: "Identity/{controller=Account}/{action=Register}");
+
+app.MapAreaControllerRoute(
+    name: "Manager",
+    areaName: "Manager",
+    pattern: "Manager/{controller=Home}/{action=Index}");
 app.Run();

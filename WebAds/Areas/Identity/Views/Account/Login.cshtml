@@ -1,4 +1,4 @@
-﻿@model string;
+﻿@model WebAds.Models.LoginViewModel;
 
 <!DOCTYPE html>
 <html>
@@ -25,10 +25,22 @@
                 <a href="../../Identity/Account/Register">Register</a>
             </div>
         </form>
+        
+        @if(@Model.ExternalAuthentication != null)
+        {
+        <form method="post" action="ExternaLogin">
+            <div>
+                @foreach (var item in @Model.ExternalAuthentication)
+                {
+                    <button type="submit" name="provider" value="@item.Name">@item.DisplayName</button>
+                }
+            </div>
+        </form>
+        }
         @{
-            if (Model != null)
+            if (@ViewBag.Error != null)
             {
-                   <p style="color:red;">@Model</p>
+                   <p style="color:red;">@ViewBag.Error</p>
             }
         }
     </div>
