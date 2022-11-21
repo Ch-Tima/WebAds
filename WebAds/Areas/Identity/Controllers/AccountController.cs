@@ -29,7 +29,6 @@ namespace WebAds.Areas.Identity.Controllers
             _emailService = emailService;
         }
 
-
         public IActionResult Register() => View();
         [HttpPost]
         [AutoValidateAntiforgeryToken]
@@ -62,15 +61,15 @@ namespace WebAds.Areas.Identity.Controllers
 
                     var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     var confirmLink = Url.Action("Confirm", "EmailConfirm",
-                        new { token = token, userEmail = user.Email }, Request.Scheme,
-                        Request.Host.Value + "/Identity");
+                        new { area = "Identity",  token = token, userEmail = user.Email }, Request.Scheme,
+                        Request.Host.Value);
 
                     var msgHtml =
                         $"<lable>Please click the link for confirm Email address:</lable><a href='{confirmLink}'>Confirm Email</a>";
 
                     await _emailService.SendEmailAsync(user.Email, "Confirmation Email(WebAd)", msgHtml);
 
-                    return RedirectToAction("Index", "Home");
+                    return Redirect("~/");
                 }
 
                 return View(nameof(Register), result.Errors.First().Description);
@@ -81,14 +80,14 @@ namespace WebAds.Areas.Identity.Controllers
             }
         }
 
-        public async Task<IActionResult> ExternaLogin(string provider, string returnUrl)
+        public async Task<IActionResult> ExternalLogin(string provider, string returnUrl)
         {
-            var redirectUrl = Url.Action("ExternaLoginCallback", "Account");
+            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account");
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
 
             return new ChallengeResult(provider, properties);
         }
-        public async Task<IActionResult> ExternaLoginCallback(string? returnUrl, string? remoteError)
+        public async Task<IActionResult> ExternalLoginCallback(string? returnUrl, string? remoteError)
         {
             returnUrl = returnUrl ?? Url.Content("~/");
             var viewMode = new LoginViewModel()
@@ -147,7 +146,7 @@ namespace WebAds.Areas.Identity.Controllers
             }
             return View("Error", new ErrorViewModel()
             {
-                RequestId = "Please contct support"
+                RequestId = "Please contact support"
             });
         }
 
@@ -190,9 +189,9 @@ namespace WebAds.Areas.Identity.Controllers
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 token = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
 
-                var link = Url.Action("ResetPassword", "Account", new { token = token, email = email }, Request.Scheme, Request.Host.Value + "/Identity");
+                var link = Url.Action("ResetPassword", "Account", new { token = token, email = email }, Request.Scheme, Request.Host.Value);
 
-                await _emailService.SendEmailAsync(email, "Reset Password(WebAds)", $"<a href='{link}'>Confirm Email</a>");
+                await _emailService.SendEmailAsync(email, "Reset Password(WebAds)", $"<a href='{link}'>ResetPassword</a>");
 
                 return View(model: "Please, check email!");
             }
@@ -218,7 +217,10 @@ namespace WebAds.Areas.Identity.Controllers
                 var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
 
                 if (result.Succeeded)
-                    return View(nameof(Login));
+                    return View(nameof(Login), new LoginViewModel()
+                    {
+                        ExternalAuthentication = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
+                    });
             }
 
             return View(nameof(Register));

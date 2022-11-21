@@ -27,15 +27,22 @@ builder.Services.AddTransient<IEmailSender, SendGridEmailService>();//SendGrid
 builder.Services.Configure<SendGridEmailSenderOption>(opt =>
 {
     opt.ApiKey = builder.Configuration.GetValue<string>("SGKey");
-    opt.SenderEmail = builder.Configuration["SenderGrid:SenderEmail"];
-    opt.SenderName = builder.Configuration["SenderGrid:SenderName"];
+    opt.SenderEmail = "logologi417@gmail.com";
+    opt.SenderName = "Tima";
 });
 
 //Enable GoogleAuth
 builder.Services.AddAuthentication().AddGoogle(opt =>
 {
-    opt.ClientId = builder.Configuration["GoogleAuth:ClientId"];
-    opt.ClientSecret = builder.Configuration["GoogleAuth:ClientSecret"];
+    opt.ClientId = builder.Configuration.GetValue<string>("GoogleAuthClientId");
+    opt.ClientSecret = builder.Configuration.GetValue<string>("GoogleAuthClientSecret");
+});
+
+//Enable FacebookAuth
+builder.Services.AddAuthentication().AddFacebook(opt =>
+{
+    opt.ClientId = builder.Configuration.GetValue<string>("FacebookAuthClientId");
+    opt.ClientSecret = builder.Configuration.GetValue<string>("FacebookClientSecret");
 });
 
 builder.Services.Configure(builder.Configuration);

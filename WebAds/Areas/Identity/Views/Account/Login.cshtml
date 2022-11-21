@@ -1,53 +1,52 @@
 ﻿@model WebAds.Models.LoginViewModel;
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Login";
+}
+@section Styles{
+    <link rel="stylesheet" href="~/css/Account.css">   
+}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" href="~/css/Account.css">
-    <title>Login</title>
-</head>
-<body>
+<div class="MainContext">
+    <div>
+            <p>SingIn</p>
+        <div class="MainForms">
+            <form asp-action="Login", asp-controller="Account" asp-area="Identity" method="post">
 
-    <div class="MainContext">
-        <p>SingIn</p>
-        <form action="~/Identity/Account/Login" method="post">
+                <input name="UserName" type="text" placeholder="UserName" required/>
+                <input name="Password" type="password" placeholder="password" required/>
 
-            <input name="UserName" type="text" placeholder="UserName" required />
-            <input name="Password" type="password" placeholder="password" required />
+                <label style="margin: 0 auto;">persistent:<input type="checkbox" id="persistent" name="isPersistent" value="false" style="width: auto;"/></label>
 
-            <label style="margin: 0 auto;">persistent:<input type="checkbox" id="persistent" name="isPersistent" value="false" style="width: auto;" /></label>
-
-            @Html.AntiForgeryToken()
-            <input type="submit" value="Login" />
-            <div style="display: contents;text-align: center;">
-                <a href="../../Identity/Account/ForgotPassword">Forgot Password</a>
-                <a href="../../Identity/Account/Register">Register</a>
-            </div>
-        </form>
-        
-        @if(@Model.ExternalAuthentication != null)
-        {
-        <form method="post" action="ExternaLogin">
-            <div>
-                @foreach (var item in @Model.ExternalAuthentication)
-                {
-                    <button type="submit" name="provider" value="@item.Name">@item.DisplayName</button>
-                }
-            </div>
-        </form>
-        }
-        @{
-            if (@ViewBag.Error != null)
+                @Html.AntiForgeryToken()
+                <input type="submit" value="Login"/>
+                <div style="display: contents; text-align: center;">
+                    <a asp-area="Identity" asp-controller="Account" asp-action="ForgotPassword">Forgot Password</a>
+                    <a asp-area="Identity" asp-controller="Account" asp-action="Register" >Register</a>
+                </div>
+            </form>
+            @if (Model.ExternalAuthentication != null)
             {
-                   <p style="color:red;">@ViewBag.Error</p>
+                <form method="post" asp-area="Identity" asp-controller="Account" asp-action="ExternalLogin">
+                    @foreach (var item in @Model.ExternalAuthentication)
+                    {
+                        <button type="submit" name="provider" value="@item.Name">@item.DisplayName</button>
+                    }
+                </form>
+            }
+        </div>
+        @{
+            if (ViewBag.Error != null)
+            {
+                <p style="color: red;">@ViewBag.Error</p>
             }
         }
     </div>
+</div>
 
 
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+@section Scripts
+{
     <script>
         $(function () {
             $("#persistent").on("click", function () {
@@ -59,7 +58,5 @@
                 }
             });
         });
-    </script>
-
-</body>
-</html>
+    </script> 
+}

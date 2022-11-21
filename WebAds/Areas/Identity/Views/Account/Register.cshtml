@@ -1,51 +1,53 @@
 ﻿@model string;
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Register";
+}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
+@section Styles
+    {
     <link rel="stylesheet" href="~/css/Account.css">
-    <title>Register</title>
-</head>
-<body>
-
+}
 
     <div class="MainContext">
-        <p style="text-align:center;">Register</p>
-        <form id="regForm" action="~/Identity/Account/Register" method="post" enctype="multipart/form-data">
-            <input type="email" placeholder="n@gmail.com" name="Email" required />
 
-            <input type="text" placeholder="Name" name="Name" required />
-            <input type="text" placeholder="Surname" name="Surname" required />
+        <div>
+            <p style="text-align:center;">Register</p>
+            <form id="regForm" asp-area="Identity" asp-controller="Account" asp-action="Register" method="post" enctype="multipart/form-data">
+                <input type="email" placeholder="n@gmail.com" name="Email" required />
 
-            <label>listCity</label>
-            <select id="listCity" name="CityName" required>
-            </select>
+                <input type="text" placeholder="Name" name="Name" required />
+                <input type="text" placeholder="Surname" name="Surname" required />
 
-            <input type="tel" placeholder="PhoneNumber" name="PhoneNumber" required />
+                <label>listCity</label>
+                <select id="listCity" name="CityName" required>
+                </select>
 
-            <input type="password" id="pas" placeholder="Password" name="Password" />
-            <input type="password" id="pasConfirm" placeholder="ConfirmPassword" name="PasswordHash" />
+                <input type="tel" placeholder="PhoneNumber" name="PhoneNumber" required />
 
-            <input type="checkbox" id="mailing" />
-            <label>Send messages email:</label>
-            <input type="hidden" value="false" id="IsMailing" name="IsMailing" />
+                <input type="password" id="pas" placeholder="Password" name="Password" />
+                <input type="password" id="pasConfirm" placeholder="ConfirmPassword" name="PasswordHash" />
 
-            <button type="button" id="btnRegister">Register</button>
-            <a href="../../Identity/Account/Login" style="text-align: center;">LogIn</a>
-            @Html.AntiForgeryToken()
-        </form>
-        @{
-            if (Model != null){
+                <label>Send messages email: <input type="checkbox" id="mailing" style="width: auto;" /></label>
+                <input type="hidden" value="false" id="IsMailing" name="IsMailing" />
+
+                <button type="button" id="btnRegister">Register</button>
+                <a asp-area="Identity" asp-controller="Account" asp-action="Login" style="text-align: center;">LogIn</a>
+                @Html.AntiForgeryToken()
+            </form>
+            @{
+                if (Model != null){
                         <p style="color:red;">@Model</p>
-            }
-            else{
+                }
+                else{
                         <p id="ErrorP" style="color:red;"></p>
+                }
             }
-        }
+        </div>
     </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @section Scripts
+    {
     <script src="~/js/Profile/OperationOnAds.js"></script>
     <script>
         $(function () {
@@ -59,18 +61,15 @@
                 }
             });
             $("#btnRegister").on("click", function () {
-                if ($("#pasConfirm").val() == $("#pas").val())
-                {
+                if ($("#pasConfirm").val() == $("#pas").val()) {
                     console.log("submit");
                     $("#regForm").submit();
                 }
-                else{
+                else {
                     console.log("ErrorP");
                     $("#ErrorP").text("ConfirmPassword is incorrect!");
                 }
             });
         });
     </script>
-
-</body>
-</html>
+}
