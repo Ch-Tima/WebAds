@@ -12,8 +12,11 @@ function GetUserAds(isPublic) {
             for (var i = 0; i < data.length; i++) {
 
                 var tempString = '<div id="Ad_' + data[i].id + '" class="Ad">' +
-                    '<p>Name:' + data[i].name + '"</p><p>Price:' + data[i].price + '</p>' +
-                    '<img src="' + data[i].pathImg + '" style="width: 80px;">';
+                    '<img src="' + data[i].pathImg + '" style="width: 80px;">' + 
+                    '<div>'+
+                    '<p>Name:' + data[i].name + '"</p>' +
+                    '<p>Price:' + data[i].price + '</p>' +
+                    '</div>';
 
 
                 if (isPublic) {

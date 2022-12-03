@@ -11,21 +11,36 @@
             <img class="Icon" src="@Model.PathImg">
         </div>
         <div class="SideRight">
-            <p>Ad data:</p>
-            <p>Title:@Model.Name</p>
-            <p>Price:@Model.Price</p>
-            <p>City: @Model.City.Name</p>
+            <div class="AdData">
+                <p>Ad data:</p>
+                <p>Title:@Model.Name</p>
+                <p>Price:@Model.Price</p>
+                <p>City: @Model.City.Name</p>
+            </div>
+            
+            <div class="UserData">
+                <hr id="HrUserData" />
 
-            <hr />
+                <p>User data:</p>
+                <label>UserName:</label>
+                <p>@Model.User.UserName</p>
 
-            <p>User data:</p>
-            <label>UserName:</label>
-            <p>@Model.User.UserName</p>
+                <label>PhoneNumber:</label>
+                @{
+                    if (Model.User.PhoneNumber == null)
+                    {
+                        <p>none</p>
+                    }
+                    else
+                    {
+                        <p>@Model.User.PhoneNumber</p>
+                    }
+                }
+                
 
-            <label>PhoneNumber:</label>
-            <p>@Model.User.PhoneNumber</p>
+                <a href="~/Profile/Index/@Model.UserId">User Profile</a>
+            </div>
 
-            <a href="~/Profile/Index/@Model.UserId">User Profile</a>
         </div>
     </div>
 
@@ -41,9 +56,9 @@
     if (SignInManager.IsSignedIn(User))
     {
     <hr />
-    <div>
-                        <textarea id="commentText"></textarea>
-                        <button id="btnAddComment" disabled>AddComment</button>
+    <div style="display: table-caption;">
+        <textarea id="commentText"></textarea>
+        <button id="btnAddComment" disabled>AddComment</button>
     </div>
     }
 }
@@ -54,7 +69,7 @@
 @section Styles{
     <link rel="stylesheet" href="~/css/AdDetails.css" asp-append-version="true" />
 }
-    @section Scripts{
+@section Scripts{
     <script>
         $(function () {
             Get();
@@ -80,7 +95,7 @@
                         $("#listComment").append("<div class='CommentBox'>" +
                             "<div class='CommentData'>" +
                             "<p>User:" + data[i].user.userName + "</p>" +
-                            "<p>DateCreate:" + data[i].dateCreate + "</p>" +
+                            "<p>DateCreate:" + $.format.date(data[i].dateCreate, "dd/MM/yyyy hh:mm") + "</p>" +
                             "</div>"+
                             "<p>Content:" + data[i].content + "</p>" +
                             "</div>");

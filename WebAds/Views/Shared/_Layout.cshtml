@@ -32,23 +32,28 @@
                         @{
                             if (SignInManager.IsSignedIn(User))
                             {
+                                if (await UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), UserRole.Manager))
+                                {
+                                    <li class="nav-item">
+                                        <a class="nav-link text-dark" asp-area="Manager" asp-controller="Home" asp-action="Index">Manager</a>
+                                    </li>
+                                }
+
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" href="~/Profile">Profile</a>
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Profile" asp-action="Index">Profile</a>
                                 </li>
 
                                 <li class="nav-item">
-                                    <form class="form-inline" action="~/Identity/Account/Logout">
-                                        <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-                                    </form>
+                                    <a class="nav-link text-dark" asp-area="Identity" asp-controller="Account" asp-action="Logout">Logout</a>
                                 </li>
                             }
                             else
                             {
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" href="~/Identity/Account/Register">Register</a>
+                                    <a class="nav-link text-dark" asp-area="Identity" asp-controller="Account" asp-action="Register">Register</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" href="~/Identity/Account/Login">Login</a>
+                                    <a class="nav-link text-dark" asp-area="Identity" asp-controller="Account" asp-action="Login">Login</a>
                                 </li>
                             }
                         }
@@ -65,11 +70,12 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2022 - WebAd - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            &copy; 2022 - WebAd
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jquery-dateformat/jquery-dateformat.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

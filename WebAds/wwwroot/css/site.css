@@ -2,6 +2,10 @@ html {
   font-size: 14px;
 }
 
+.MainContener {
+    width: 100%;
+}
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
@@ -15,6 +19,17 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+.Filters {
+    display: flex;
+    justify-content: center;
+}
+.ListCategory {
+    margin: 0 2%;
+}
+.ListCity {
+    margin: 0 2%;
 }
 
 

@@ -1,6 +1,7 @@
 ﻿$(function () {
     GetCity();
     GetCategory();
+    FilterAd();
 });
 
 function FilterAd(idCategory = -1, cityName = "") {
@@ -8,7 +9,7 @@ function FilterAd(idCategory = -1, cityName = "") {
         url: "../api/ApiAds/" + (idCategory > 0 ? idCategory : -1) + "/" + (cityName.length > 0 ? cityName : ""),
         type: "GET",
         success: function (data) {
-            $("#listAd").text("");
+            $("#listAd").text("");//Clear ListAd
             for (var i = 0; i < data.length; i++) {
                 $("#listAd").append('<form class="InputPageMovie" method="get" action="../Home/AdDetails">' +
                     '<input type="hidden" name="id" value="' + data[i].id + '"/>' +
@@ -49,12 +50,8 @@ function GetCity() {
         url: "../../api/ApiCity",
         type: "GET",
         success: function (data) {
-            $("#listAd").text("");//Clear ListAd
             for (var i = 0; i < data.length; i++) {
-                if (data[i].ads.length > 0) {
-                    $("#listCity").append('<li><a val="' + data[i].name + '">' + data[i].name + '</a></li>');
-                    AddAd(data[i].ads);
-                }
+                $("#listCity").append('<li><a val="' + data[i].name + '">' + data[i].name + ' ~' + data[i].ads.length + '</a></li>');
             }
             $("div[class='ListCity']").find("a").on("click", function () {
                 $("#cityName").text($(this).text());

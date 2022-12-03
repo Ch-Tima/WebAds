@@ -1,48 +1,33 @@
-﻿@model IEnumerable<Ad>
-@{
+﻿@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
-
-<style>
-    .MainContener {
-        width: 100%;
-    }
-
-</style>
-
-
-<div id="Filter" style="height: 32px;">
-    <div class="ListCategory">
-        <ul class='Nav'>
-            <li>
-                <a id="categoryName" val="-1">Category</a>
-                <ul id="n0">
-                    <li><a val="-1">AllCategory</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-    <div class="ListCity">
-        <ul class='Nav'>
-            <li>
-                <a id="cityName">City</a>
-                <ul id="listCity">
-                    <li><a val="">AllCity</a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</div>
-
 <div class="MainContener">
 
-    <div id="listAd" class="ListAd">
+    <div class="Filters" id="Filter">
+        <div class="ListCategory">
+            <ul class='Nav'>
+                <li>
+                    <a id="categoryName" val="-1">Category</a>
+                    <ul id="n0">
+                        <li><a val="-1">AllCategory</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="ListCity">
+            <ul class='Nav'>
+                <li>
+                    <a id="cityName">City</a>
+                    <ul id="listCity">
+                        <li><a val="">AllCity</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
 
+    <div id="listAd" class="ListAd">
     </div>
 
 </div>

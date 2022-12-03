@@ -55,8 +55,8 @@ namespace WebAds.Controllers
         {
             var user = await _userManager.GetUserAsync(User);
 
-            var ad = (List<Ad>)await _adsServices.Find(x => x.Id == idAd && x.UserId == user.Id, true);
-            if (ad != null && ad.Count() > 0)
+            var ad = (List<Ad>)await _adsServices.Find(x => x.Id == idAd && x.UserId == user.Id);
+            if (ad?.Count() > 0)
                 return View(ad[0]);
 
             return Redirect("~/Profile");
@@ -73,8 +73,8 @@ namespace WebAds.Controllers
             {
                 var user = await _userManager.GetUserAsync(User);
 
-                user.UserName = model.UserName;
-                user.Surname = model.Surname;
+                //user.UserName = model.UserName;
+                //user.Surname = model.Surname??string.Empty;
                 user.IsMailing = model.IsMailing;
 
                 if (file != null)

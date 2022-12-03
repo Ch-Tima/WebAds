@@ -20,16 +20,10 @@ namespace WebAds.Controllers
             _userManager = userManager;
         }
         [AllowAnonymous]
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<IEnumerable<Comment>> Get(int id)
         {
-            var result = await _commentServices.Find(x => x.AdId == id);
-
-            foreach (var item in result)
-                if (item.User != null)
-                    item.User.Comments = null;
-
-            return result;
+            return await _commentServices.Find(x => x.AdId == id);
         }
 
         [HttpPost]
