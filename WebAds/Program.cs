@@ -3,13 +3,14 @@ using BLL.Infrastructure;
 using Domain.Models;
 using Azure.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Serilog;
+using WebAds.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
 //Azure
 var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri"));
 builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
-
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -45,6 +46,15 @@ builder.Services.AddAuthentication().AddFacebook(opt =>
     opt.ClientSecret = builder.Configuration.GetValue<string>("FacebookClientSecret");
 });
 
+builder.Host.UseSerilog((hostContext, asyncServiceScope, configuration) =>
+{
+    configuration.WriteTo.Console();
+    configuration.WriteTo.File(builder.Configuration["Logging:LogPath"]);
+});
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+
 builder.Services.Configure(builder.Configuration);
 
 //Add Swagger
@@ -56,6 +66,13 @@ builder.Services.AddSwaggerGen(x =>
         Version = "v1"
     });
 });
+//ExceptionFilter
+builder.Services.AddMvcCore(options =>
+{
+    options.Filters.Add<ExceptionFilter>();
+});
+
+builder.Services.AddApplicationInsightsTelemetry(builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]);
 
 var app = builder.Build();
 
@@ -63,7 +80,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -100,4 +116,5 @@ app.MapAreaControllerRoute(
     name: "Manager",
     areaName: "Manager",
     pattern: "Manager/{controller=Home}/{action=Index}");
+
 app.Run();
