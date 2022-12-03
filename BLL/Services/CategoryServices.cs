@@ -1,11 +1,6 @@
-﻿using DLL.Repository;
-using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Domain.Models;
+using DLL.Repository;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Services
 {
@@ -21,6 +16,7 @@ namespace BLL.Services
         {
             await _categoryRepository.AddAsync(entity);
         }
+
         public async Task<IEnumerable<Category>> GetAllAsync()
         {
             return await _categoryRepository.GetAllAsync();
@@ -29,9 +25,23 @@ namespace BLL.Services
         {
             return await _categoryRepository.Find(expression);
         }
+        public async Task<IEnumerable<Category>> GetMainCategoriesAsync()
+        {
+            return await _categoryRepository.GetMainCategoriesAsync();
+        }
+
         public async Task<Category> GetAsync(int id)
         {
             return await _categoryRepository.GetAsync(id);
+        }
+        public async Task<Category> GetOnlyAsync(int id)
+        {
+            return await _categoryRepository.GetOnlyAsync(id);
+        }
+
+        public async Task<bool> IsExists(int id)
+        {
+            return await _categoryRepository.IsExists(id);
         }
         public async Task<bool> RemoveAsync(int id)
         {
@@ -40,14 +50,7 @@ namespace BLL.Services
 
         public async Task UpdateAsync(Category entity)
         {
-            try
-            {
-                await _categoryRepository.UpdateAsync(entity);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            await _categoryRepository.UpdateAsync(entity);
         }
 
     }

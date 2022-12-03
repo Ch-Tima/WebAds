@@ -23,7 +23,7 @@ namespace BLL.Infrastructure
             services.AddTransient<CommentRepository>();
             services.AddTransient<UserRepository>();
 
-            //Set setings Identity
+            //Set settings Identity
             services.AddIdentity<User, IdentityRole>(opt =>
             {
                 //Password settings
@@ -32,6 +32,8 @@ namespace BLL.Infrastructure
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.Password.RequireUppercase = false;
                 opt.Password.RequiredLength = 4;
+
+                opt.User.AllowedUserNameCharacters += " ";
 
             }).AddEntityFrameworkStores<AdDbContext>().AddDefaultTokenProviders();
 

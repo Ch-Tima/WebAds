@@ -1,10 +1,5 @@
-﻿
-using DLL.Repository;
+﻿using DLL.Repository;
 using Domain.Models;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Globalization;
-using System.Numerics;
 
 namespace BLL.Services
 {
@@ -30,10 +25,7 @@ namespace BLL.Services
                 return await _userRepository.GetAsync(id);
             else
                 return await _userRepository.GetOnlyAsync(id);
-            
         }
-
-
 
         public async Task<bool> RemoveAsync(string id)
         {
@@ -42,14 +34,7 @@ namespace BLL.Services
 
         public async Task UpdateAsync(User entity)
         {
-            try
-            {
-                await _userRepository.UpdateAsync(entity);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            await _userRepository.UpdateAsync(entity);
         }
 
     }

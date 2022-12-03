@@ -1,8 +1,12 @@
-﻿
-namespace Domain.Models
+﻿namespace Domain.Models
 {
     public class Ad
     {
+        public Ad()
+        {
+            Comments = new List<Comment>();
+        }
+
         public int Id { get; set; }
 
         public string Name { get; set; }
@@ -29,6 +33,6 @@ namespace Domain.Models
         public string? UserId { get; set; }
         public User? User { get; set; }
 
-        public List<Comment>? Comments { get; set; }
+        public virtual ICollection<Comment>? Comments { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace WebAds.Models
+﻿namespace Domain.Models
 {
     public static class UserRole
     {

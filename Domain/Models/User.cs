@@ -1,10 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-
 namespace Domain.Models
 {
     public class User : IdentityUser
     {
+        public User()
+        {
+            Comments = new List<Comment>();
+            Ads = new List<Ad>();
+        }
+
         public string Surname { get; set; }
         public string IconPath { get; set; }
         
@@ -14,7 +19,7 @@ namespace Domain.Models
 
         public bool IsMailing { get; set; }
 
-        public List<Comment> Comments { get; set; }
-        public List<Ad> Ads { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<Ad> Ads { get; set; }
     }
 }
