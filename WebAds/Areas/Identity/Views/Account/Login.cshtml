@@ -18,12 +18,12 @@
 
                 <label style="margin: 0 auto;">persistent:<input type="checkbox" id="persistent" name="isPersistent" value="false" style="width: auto;"/></label>
 
-                @Html.AntiForgeryToken()
                 <input type="submit" value="Login"/>
                 <div style="display: contents; text-align: center;">
                     <a asp-area="Identity" asp-controller="Account" asp-action="ForgotPassword">Forgot Password</a>
                     <a asp-area="Identity" asp-controller="Account" asp-action="Register" >Register</a>
                 </div>
+                @Html.AntiForgeryToken()
             </form>
             @if (Model.ExternalAuthentication != null)
             {

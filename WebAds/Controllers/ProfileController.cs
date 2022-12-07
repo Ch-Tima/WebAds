@@ -2,6 +2,7 @@
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using WebAds.Helpers;
 
@@ -15,16 +16,18 @@ namespace WebAds.Controllers
         private readonly UserServices _userServices;
 
         private readonly IWebHostEnvironment _appEnvironment;
+        private readonly IEmailSender _emailService;
 
         public ProfileController(UserManager<User> userManager,
             AdsServices adsServices,
             UserServices userServices,
-            IWebHostEnvironment appEnvironment)
+            IWebHostEnvironment appEnvironment, IEmailSender emailService)
         {
             _userManager = userManager;
             _adsServices = adsServices;
             _userServices = userServices;
             _appEnvironment = appEnvironment;
+            _emailService = emailService;
         }
 
         public async Task<IActionResult> Index()
@@ -64,23 +67,42 @@ namespace WebAds.Controllers
 
         public async Task<IActionResult> UpdateProfile()
         {
-            return View(await _userManager.GetUserAsync(User));
+            var user = await _userManager.GetUserAsync(User);
+
+            if (!user.EmailConfirmed)//If email address isn't verified
+            {
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var confirmLink = Url.Action("Confirm", "EmailConfirm", 
+                    values: new { area = "Identity", token = token, userEmail = user.Email }, 
+                    Request.Scheme, Request.Host.Value);
+
+                var msgHtml = $"<lable>Please click the link for confirm Email address:</lable><a href='{confirmLink}'>Confirm Email</a>";
+
+                await _emailService.SendEmailAsync(user.Email, "Confirmation Email(WebAd)", msgHtml);
+
+                ViewBag.Error = "Please click email and confirm your email address.";
+                ViewBag.IsPublicProfile = false;
+                return View(nameof(Index), user);
+            }
+
+            return View(user);
         }
         [HttpPost]
+        [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> UpdateProfile(User model, IFormFile? file)
         {
             try
             {
                 var user = await _userManager.GetUserAsync(User);
 
-                //user.UserName = model.UserName;
-                //user.Surname = model.Surname??string.Empty;
                 user.IsMailing = model.IsMailing;
+
+                user.TwoFactorEnabled = model.TwoFactorEnabled;
 
                 if (file != null)
                 {
                     string filePathDb = "/FilesDb/" + FilesHelper.RandomName() + ".png";
-                    if (await file.SaveFile( _appEnvironment.WebRootPath + filePathDb))
+                    if (await file.SaveFile(_appEnvironment.WebRootPath + filePathDb))
                     {
                         FilesHelper.DeleteFile(user.IconPath);
                         user.IconPath = filePathDb;

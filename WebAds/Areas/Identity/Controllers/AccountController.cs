@@ -80,6 +80,7 @@ namespace WebAds.Areas.Identity.Controllers
             }
         }
 
+
         public async Task<IActionResult> ExternalLogin(string provider, string returnUrl)
         {
             var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account");
@@ -125,6 +126,7 @@ namespace WebAds.Areas.Identity.Controllers
                             Email = info.Principal.FindFirstValue(ClaimTypes.Email),
                             UserName = info.Principal.FindFirstValue(ClaimTypes.Name),
                             Surname = info.Principal.FindFirstValue(ClaimTypes.Surname)??string.Empty,
+                            EmailConfirmed = true
                         };
                        var res =  await _userManager.CreateAsync(user);
                        if (res.Succeeded)
@@ -161,9 +163,16 @@ namespace WebAds.Areas.Identity.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.IsPersistent, false);
+                var user = await _userManager.FindByNameAsync(model.UserName);
+                var result = await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.IsPersistent, lockoutOnFailure:(user == null ? false : user.TwoFactorEnabled));
                 if (result.Succeeded)
                     return Redirect("~/");
+
+                if (result.RequiresTwoFactor)
+                {
+                    await GenerateTwoFactorTokenAsync(user);
+                    return View(nameof(SingInTwoFactor));
+                }
 
                 ViewBag.Error = "User not found!";
                 return View(nameof(Login), new LoginViewModel()
@@ -176,6 +185,20 @@ namespace WebAds.Areas.Identity.Controllers
             {
                 ExternalAuthentication = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList()
             });
+        }
+
+
+        public IActionResult SingInTwoFactor() => View();
+        [HttpPost]
+        [AutoValidateAntiforgeryToken]
+        public async Task<IActionResult> SingInTwoFactor(string code)
+        {
+            var result = await _signInManager.TwoFactorSignInAsync("Email", code, false, false);
+            if(result.Succeeded)
+                return Redirect("~/");
+
+            ViewBag.Error = "Incorrect code!";
+            return View();
         }
 
 
@@ -226,12 +249,21 @@ namespace WebAds.Areas.Identity.Controllers
             return View(nameof(Register));
         }
 
+
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
             //delete local cookie
             await _signInManager.SignOutAsync();
             return Redirect("~/Home");
+        }
+
+
+        private async Task GenerateTwoFactorTokenAsync(User user)
+        {
+            var token = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
+            var msgHtml = $"<lable>Code:{token}</lable>";
+            await _emailService.SendEmailAsync(user.Email, "2FA Code(WebAd)", msgHtml);
         }
     }
 }
