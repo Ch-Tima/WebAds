@@ -67,8 +67,8 @@ namespace DLL.Context
                 UserName = "Tima",
                 NormalizedUserName = "Tima".ToUpper(),
                 Surname = "Ch",
-                NormalizedEmail = "temp.temp@gmail.com".ToUpper(),
-                Email = "temp.temp@gmail.com",
+                NormalizedEmail = "chizhevskii.tima@gmail.com".ToUpper(),
+                Email = "chizhevskii.tima@gmail.com",
                 EmailConfirmed = true
             };
             var hasher = new PasswordHasher<User>();

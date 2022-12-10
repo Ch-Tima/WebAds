@@ -67,9 +67,10 @@ namespace WebAds.Controllers
 
         public async Task<IActionResult> UpdateProfile()
         {
-            var user = await _userManager.GetUserAsync(User);
-
-            if (!user.EmailConfirmed)//If email address isn't verified
+            var user = await _userServices.GetAsync(_userManager.GetUserId(User));
+  
+            //If email address isn't verified
+            if (!user.EmailConfirmed)
             {
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var confirmLink = Url.Action("Confirm", "EmailConfirm", 
@@ -95,8 +96,8 @@ namespace WebAds.Controllers
             {
                 var user = await _userManager.GetUserAsync(User);
 
+                user.CityName = model.CityName;
                 user.IsMailing = model.IsMailing;
-
                 user.TwoFactorEnabled = model.TwoFactorEnabled;
 
                 if (file != null)

@@ -19,12 +19,13 @@ namespace BLL.Services
             return await _userRepository.GetAllAsync();
         }
 
-        public async Task<User> GetAsync(string id, bool fullLoad = false)
+        public async Task<User> GetAsync(string id)
         {
-            if (fullLoad)
-                return await _userRepository.GetAsync(id);
-            else
-                return await _userRepository.GetOnlyAsync(id);
+            return await _userRepository.GetAsync(id);
+        }
+        public async Task<User> GetOnlyAsync(string id)
+        {
+            return await _userRepository.GetOnlyAsync(id);
         }
 
         public async Task<bool> RemoveAsync(string id)
