@@ -1,4 +1,5 @@
 ![Platform](https://img.shields.io/badge/ASP.NET%20Core-6.0-brightgreen)
+![Platform](https://img.shields.io/badge/version-2.0-blue)
 
 # WebAds
 
@@ -15,8 +16,8 @@ Implemented:
   <li type='1'>User</li>
    <ul>
     <li>Profile editor.</li>
-    <li>Abiliy to create custom ads and edit them.</li> 
-    <li>Abiliy to add comments</li>
+    <li>Ability to create custom ads and edit them.</li> 
+    <li>Ability to add comments</li>
    </ul>
     <li type='1'>Manager (Has the right to control 'User' ads)</li>
     <li type='1'>Swagger</li>
