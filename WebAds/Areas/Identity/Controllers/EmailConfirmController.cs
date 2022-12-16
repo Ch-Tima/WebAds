@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using WebAd.Models;
 
 namespace WebAds.Areas.Identity.Controllers
 {
@@ -28,7 +29,7 @@ namespace WebAds.Areas.Identity.Controllers
                 if(result.Succeeded)
                 {
                     await _emailService.SendEmailAsync(userEmail, "Confirmation Email(WebAd)", "<p>Your email has been verified!</p>");
-                    return RedirectToAction("Index", "Home");
+                    return Redirect("~/");
                 }
             }
 

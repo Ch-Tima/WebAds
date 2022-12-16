@@ -1,13 +1,6 @@
-﻿* {
-    margin: 0px;
-    padding: 0px;
-}
-
-body {
+﻿.MainContext {
     display: flex;
     justify-content: center;
-    height: 100vh;
-    align-items: center;
 }
 
 .MainContext p {
@@ -33,4 +26,8 @@ body {
     margin: 5px auto;
     height: 28px;
     border-radius: 1em;
+}
+
+.MainForms {
+    display: inline-grid;
 }

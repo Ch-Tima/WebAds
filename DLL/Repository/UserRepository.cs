@@ -23,12 +23,10 @@ namespace DLL.Repository
         {
             return await _dbContext.Users.Where(expression).ToListAsync();
         }
-
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             return await _dbContext.Users.ToListAsync();
         }
-
 
         public async Task<User> GetAsync(string id)
         {
@@ -38,6 +36,7 @@ namespace DLL.Repository
         {
             return await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id);
         }
+
         public async Task<bool> RemoveAsync(string id)
         {
             var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.Id == id.ToString());
@@ -54,15 +53,8 @@ namespace DLL.Repository
 
         public async Task UpdateAsync(User entity)
         {
-            try
-            {
-                _dbContext.Entry(entity).State = EntityState.Modified;
-                await _dbContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            _dbContext.Entry(entity).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
         }
 
     }

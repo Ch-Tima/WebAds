@@ -14,30 +14,9 @@ namespace WebAds.Controllers
             _categoryServices = categoryServices;
         }
         [HttpGet]
-        public async Task<IEnumerable<Category>> Get()
+        public async Task<IEnumerable<Category>> GetMainCategories()
         {
-            var f = await _categoryServices.GetAllAsync();
-
-            foreach (var item in f)
-            {
-                if (item.Categors != null)
-                    item.Categors = null;
-            }
-            
-            var temp = new List<Category>(f);
-
-            foreach (var item in f)
-            {
-                if (item.Categories != null)
-                {
-                    foreach (var category in item.Categories)
-                    {
-                        category.Categors = null;
-                        temp.Remove(category);
-                    }
-                }
-            }
-            return temp;
+            return await _categoryServices.GetMainCategoriesAsync();
         }
     }
 }

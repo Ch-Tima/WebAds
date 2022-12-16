@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "2FA";
+    Layout = "_Layout";
+
+    if (ViewBag.Error != null)
+    {
+        <h4>@ViewBag.Error</h4>
+    }
+        
+}
+
+<form method="post" asp-area="Identity" asp-controller="Account" asp-action="SingInTwoFactor">
+    <input type="text" placeholder="code" name="code"/>
+    @Html.AntiForgeryToken()
+    <input type="submit" value="SingIn"/>
+</form>
+
+<a asp-area="Identity" asp-controller="Account" asp-action="Login">Login</a>

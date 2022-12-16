@@ -27,3 +27,45 @@
 .RightData {
     margin-left: 20px;
 }
+
+.Ad {
+    display: flex;
+    justify-content: space-between;
+    background-color: aquamarine;
+    width: 70%;
+    height: 100px;
+    margin: 3px auto;
+}
+
+button {
+    border: groove;
+    border-radius: 2px;
+    height: fit-content;
+}
+
+.btnControlAd {
+    display: flex;
+    margin: auto 0;
+}
+
+    .btnControlAd button {
+        margin: 0 2px;
+    }
+
+.DataAd {
+    display: flex;
+}
+
+.DataAdText {
+    display: block;
+}
+
+@media (max-width: 768px) {
+    .btnControlAd {
+        display: block;
+    }
+
+    .btnControlAd button {
+        margin: 2px 0;
+    }
+}

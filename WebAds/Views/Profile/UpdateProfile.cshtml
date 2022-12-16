@@ -9,12 +9,6 @@
 
     <div style="display:inline-grid;">
 
-        <label>Name:</label>
-        <input type="text" value="@Model.UserName" name="UserName" />
-        <label>Surname:</label>
-        <input type="text" value="@Model.Surname" name="Surname" />
-
-
         <label>Icon:</label>
         <input type="file" name="file" accept="image/*" />
 
@@ -23,12 +17,16 @@
         </select>
 
         <label>
-            Condent to send Emails: <input type="checkbox" id="mailing" value="@Model.IsMailing" name="IsMailing" />
+            Condent to send Emails: <input type="checkbox" id="mailing" value="@Model.IsMailing.ToString().ToLower()" name="IsMailing" />
+        </label>
+        <label>
+            Enabled 2FA: <input type="checkbox" id="twoFactorEnabled" value="@Model.TwoFactorEnabled.ToString().ToLower()" name="TwoFactorEnabled" />
         </label>
        
 
         <button type="submit">Save</button>
     </div>
+    @Html.AntiForgeryToken()
 
 </form>
 
@@ -37,19 +35,25 @@
     <script src="~/js/Profile/OperationOnAds.js"></script>
     <script>
         $(function () {
-            GetCity('@Model.CityName');
-            $("#mailing").prop('checked', @Model.IsMailing.ToString().ToLower());
 
+            GetCity("@Model.CityName");
+
+            $("#mailing").prop('checked', @Model.IsMailing.ToString().ToLower());
+            $("#twoFactorEnabled").prop('checked', @Model.TwoFactorEnabled.ToString().ToLower());
+
+            $("input[type=checkbox]").on("click", function () {
+                if ($(this).val() == "false") {
+                    $(this).val(true);
+                    $(this).prop('checked', true);
+                }
+                else {
+                    $(this).val(false);
+                    $(this).prop('checked', false);
+                }
+            
+            });
+        
         });
-        $("#mailing").on("click", function () {
-            if ($(this).val() == "false") {
-                $("#mailing").val(true);
-                $("#mailing").prop('checked', true);
-            }
-            else {
-                $("#mailing").val(false);
-                $("#mailing").prop('checked', false);
-            }
-        });
+        
     </script>
 }

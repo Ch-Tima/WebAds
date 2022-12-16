@@ -12,15 +12,23 @@ function GetUserAds(isPublic) {
             for (var i = 0; i < data.length; i++) {
 
                 var tempString = '<div id="Ad_' + data[i].id + '" class="Ad">' +
-                    '<p>Name:' + data[i].name + '"</p><p>Price:' + data[i].price + '</p>' +
-                    '<img src="' + data[i].pathImg + '" style="width: 80px;">';
+                    
+                    '<div class="DataAd">' +
+                    '<img src="' + data[i].pathImg + '" style="width: 80px;">' + 
+                    '<div class="DataAdText">' +
+                        '<p>Name:' + data[i].name + '"</p>' +
+                        '<p>Price:' + data[i].price + '</p>' + 
+                    '</div>' +
+                    '</div>';
 
 
                 if (isPublic) {
-                    tempString += '<button type="button" class="btnRemove" value="' + data[i].id + '">Remove</button>' +
+                    tempString += '<div class="btnControlAd">' +
+                        '<button type="button" class="btnRemove" value="' + data[i].id + '">Remove</button>' +
                         '<form method="post" action="../../Profile/UpdateAd">' +
                         '<input type="hidden" value="' + data[i].id + '" name="idAd" />' +
-                        '<button type="submit">Update</button></form></div>';
+                        '<button type="submit">Update</button></form></div>' +
+                        '</div>';
                 }
                 else {
                     tempString += '</div>';

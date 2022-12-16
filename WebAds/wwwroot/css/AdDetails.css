@@ -16,8 +16,16 @@
 }
 .CommentBox {
     width: 380px;
-    background: aquamarine;
+    background-color: #f6f6f6;
     margin: 8px 5px;
+}
+.CommentBox p {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    margin: 0 10px;
 }
 
 .CommentData {
@@ -25,6 +33,32 @@
     justify-content: space-around;
 }
 
+@media (max-width: 576px) {
+    .MainContext {
+        display: block;
+    }
+    .SideRight {
+        display: flex;
+        justify-content: space-around;
+        margin: 8px 0px;
+    }
+    .UserData {
+        margin: 0 2px;
+    }
+    .AdData {
+        margin: 0 2px;
+    }
+    .Icon {
+        width: 100%;
+        margin: 0 auto;
+    }
+    .CommentBox {
+        width: 80%;
+        padding: 10px;
+    }
+
+    #HrUserData{ display: none;}
+}
 @media (max-width: 700px) {
     .Icon img {
         width: 220px;

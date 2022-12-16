@@ -1,35 +1,36 @@
 ﻿using BLL.Services;
+using Domain.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace WebAd.Controllers
+namespace WebAds.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly CityServices _cityServices;
-        private readonly CategoryServices _categoryServices;
         private readonly AdsServices _adsServices;
+        private readonly UserManager<Domain.Models.User> _userManager;
         public HomeController(AdsServices adsServices,
-            CityServices cityServices, CategoryServices categoryServices)
+            UserManager<User> userManager)
         {
             _adsServices = adsServices;
-
-            _cityServices = cityServices;
-            _categoryServices = categoryServices;
+            _userManager = userManager;
         }
         [HttpGet]
-        public async Task<IActionResult> Index(int page = 0)
+        public IActionResult Index()
         {
-            return View(await _adsServices.GetAllAsync());
+            return View();
         }
         [HttpGet]
         public async Task<IActionResult> AdDetails(int id)
         {
-            var ad = await _adsServices.GetAsync(id, true);
-
-            if (ad == null)
-                return Redirect("~/");
-            else
-                return View(ad);
+            var ad = await _adsServices.GetAsync(id);
+            if (ad != null)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (ad.IsVerified || (user != null && await _userManager.IsInRoleAsync(user, UserRole.Manager)))
+                    return View(ad);
+            }
+            return Redirect("~/");
         }
     }
 }

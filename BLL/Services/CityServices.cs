@@ -1,5 +1,6 @@
 ﻿using DLL.Repository;
 using Domain.Models;
+using System.Linq.Expressions;
 
 namespace BLL.Services
 {
@@ -18,10 +19,19 @@ namespace BLL.Services
         {
             return await _cityRepository.GetAllAsync();
         }
-
         public async Task<City> GetAsync(string name)
         {
             return await _cityRepository.GetAsync(name);
+        }
+
+        public async Task<IEnumerable<City>> Find(Expression<Func<City, bool>> expression)
+        {
+            return await _cityRepository.Find(expression);
+        }
+
+        public async Task<bool> IsExists(string cityName)
+        {
+            return await _cityRepository.IsExists(cityName);
         }
         public async Task<bool> RemoveAsync(string name)
         {
@@ -30,14 +40,7 @@ namespace BLL.Services
 
         public async Task UpdateAsync(City entity)
         {
-            try
-            {
-                await _cityRepository.UpdateAsync(entity);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            await _cityRepository.UpdateAsync(entity);
         }
     }
 }

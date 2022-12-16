@@ -1,13 +1,7 @@
 ﻿using DLL.Context;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 
 namespace DLL.Repository
 {
@@ -24,11 +18,26 @@ namespace DLL.Repository
             await _dbContext.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<Comment>> FindOnly(Expression<Func<Comment, bool>> expression)
+        {
+            return await _dbContext.Comments.Where(expression).ToListAsync();
+        }
+
         public async Task<IEnumerable<Comment>> Find(Expression<Func<Comment, bool>> expression)
         {
-            return await _dbContext.Comments
-                .Include(x => x.User)
-                .Where(expression).ToListAsync();
+            return await _dbContext.Comments.Select(x => new Comment()
+            {
+                UserId = x.UserId,
+                User = new User()
+                {
+                    UserName = x.User.UserName,
+                    Surname = x.User.Surname
+                },
+                AdId = x.AdId,
+                Content = x.Content,
+                DateCreate = x.DateCreate,
+                Id = x.Id
+            }).Where(expression).ToListAsync(); ;
         }
 
         public async Task<IEnumerable<Comment>> GetAllAsync()
@@ -57,15 +66,8 @@ namespace DLL.Repository
 
         public async Task UpdateAsync(Comment entity)
         {
-            try
-            {
-                _dbContext.Entry(entity).State = EntityState.Modified;
-                await _dbContext.SaveChangesAsync();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            _dbContext.Entry(entity).State = EntityState.Modified;
+            await _dbContext.SaveChangesAsync();
         }
     }
 }

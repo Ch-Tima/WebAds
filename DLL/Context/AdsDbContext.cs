@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +11,7 @@ namespace DLL.Context
         {
             Database.EnsureCreated();
         }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -58,7 +60,138 @@ namespace DLL.Context
             //User -> Comments OneToMany
             modelBuilder.Entity<Comment>().HasOne(x => x.User).WithMany(x => x.Comments).HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
 
+
+            //default initialization
+            var managerDef = new User()
+            {
+                UserName = "Tima",
+                NormalizedUserName = "Tima".ToUpper(),
+                Surname = "Ch",
+                NormalizedEmail = "chizhevskii.tima@gmail.com".ToUpper(),
+                Email = "chizhevskii.tima@gmail.com",
+                EmailConfirmed = true
+            };
+            var hasher = new PasswordHasher<User>();
+            managerDef.PasswordHash = hasher.HashPassword(managerDef, "admin");
+
+            var userRole = new IdentityRole()
+            {
+                Name = UserRole.User,
+                NormalizedName = UserRole.User.ToUpper()
+            };
+            var managerRole = new IdentityRole()
+            {
+                Name = UserRole.Manager,
+                NormalizedName = UserRole.Manager.ToUpper()
+            };
+
+            modelBuilder.Entity<User>().HasData(new User[] { managerDef });
+            modelBuilder.Entity<IdentityRole>().HasData(new IdentityRole[] { userRole, managerRole });
+            modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string>[]
+            {
+                new IdentityUserRole<string>()
+                {
+                    RoleId = managerRole.Id,
+                    UserId = managerDef.Id
+                }
+            });
+            modelBuilder.Entity<City>().HasData(new City[]
+            {
+                new City()
+                {
+                    Name = "Name_0F",
+                    Region = "Region_F"
+                },
+                new City()
+                {
+                    Name = "Name_1F",
+                    Region = "Region_F"
+                },
+                new City()
+                {
+                    Name = "Name_78B",
+                    Region = "Region_B"
+                },
+                new City()
+                {
+                    Name = "Name_24B",
+                    Region = "Region_B"
+                },
+                new City()
+                {
+                    Name = "Name_22B",
+                    Region = "Region_B"
+                },
+                new City()
+                {
+                    Name = "Name_99X",
+                    Region = "Region_X"
+                }
+            });
+
+            modelBuilder.Entity<Category>().HasData(new List<Category>()
+            {
+                new Category()
+                {
+                    Id = 1,
+                    Name = "Category_EE"
+                },
+                new Category()
+                {
+                    Id = 88,
+                    Name = "Category_0E",
+                    CategoryId = 1,
+                },
+                new Category()
+                {
+                    Id = 89,
+                    Name = "Category_1E",
+                    CategoryId = 1
+                },
+                new Category()
+                {
+                    Id = 2,
+                    Name = "Category_CC",
+                },
+                new Category()
+                {
+                    Id = 3,
+                    Name = "Category_FF",
+                },
+                new Category()
+                {
+                    Id = 77,
+                    Name = "Category_F1",
+                    CategoryId = 3
+                },
+                new Category()
+                {
+                    Id = 78,
+                    Name = "Category_F0",
+                    CategoryId = 3
+                },
+                new Category()
+                {
+                    Id = 66,
+                    Name = "Category_F0A",
+                    CategoryId = 78
+                },
+                new Category()
+                {
+                    Id = 67,
+                    Name = "Category_F0B",
+                    CategoryId = 78
+                },
+                new Category()
+                {
+                    Id = 68,
+                    Name = "Category_F0C",
+                    CategoryId = 78
+                },
+
+            });
         }
+
         public DbSet<Ad> Ads { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Category> Categories { get; set; }

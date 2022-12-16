@@ -2,6 +2,10 @@ html {
   font-size: 14px;
 }
 
+.MainContener {
+    width: 100%;
+}
+
 @media (min-width: 768px) {
   html {
     font-size: 16px;
@@ -17,6 +21,17 @@ body {
   margin-bottom: 60px;
 }
 
+.Filters {
+    display: flex;
+    justify-content: center;
+}
+.ListCategory {
+    margin: 0 2%;
+}
+.ListCity {
+    margin: 0 2%;
+}
+
 
 .ListAd {
     background-color: antiquewhite;
@@ -30,6 +45,15 @@ body {
     width: 70%;
     height: 100px;
     margin: 3px auto;
+}
+.AdContent {
+    width: 100%;
+    margin: 0 10px;
+}
+.Price{
+    color: forestgreen;
+    font-size: 16px;
+    margin: 0 5px;
 }
 
 

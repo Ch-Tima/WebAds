@@ -1,11 +1,6 @@
 ﻿using DLL.Repository;
 using Domain.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BLL.Services
 {
@@ -42,14 +37,7 @@ namespace BLL.Services
 
         public async Task UpdateAsync(Comment entity)
         {
-            try
-            {
-                await _commentRepository.UpdateAsync(entity);
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+            await _commentRepository.UpdateAsync(entity);
         }
     }
 }
