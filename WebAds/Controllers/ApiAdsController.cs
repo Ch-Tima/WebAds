@@ -115,6 +115,7 @@ namespace WebAds.Controllers
                     if (await upload.SaveFile(_appEnvironment.WebRootPath + filePathDb))
                         ad.PathImg = filePathDb;
                 }
+                ad.IsVerified = false;
                 //Save Ad to db
                 await _adServices.UpdateAsync(ad);
                 return Ok("The update operation was successful!");

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+
 namespace WebAds.Areas.Manager.Controllers
 {
     [Area("Manager")]
@@ -15,7 +16,8 @@ namespace WebAds.Areas.Manager.Controllers
         private readonly CityServices _cityServices;
         private readonly CategoryServices _categoryServices;
         private readonly AdsServices _adsServices;
-        private readonly  IEmailSender _emailSender;
+        private readonly IEmailSender _emailSender;
+
         public HomeController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager,
             CityServices cityServices, CategoryServices categoryServices, AdsServices adsServices,
             IEmailSender emailSender)
@@ -27,52 +29,38 @@ namespace WebAds.Areas.Manager.Controllers
             _adsServices = adsServices;
 
             _emailSender = emailSender;
-            
         }
 
-        public async Task<IActionResult> Index()
-        {
-            return View(await _adsServices.GetAllAsync());
-        }
+        public async Task<IActionResult> Index() => View();
 
-        public async Task<IActionResult> ActivAd(int id)
-        {
-            var ad = await _adsServices.GetAsync(id);
-            if(ad == null)
-                return BadRequest("Not Found!");
+        [HttpGet]
+        public async Task<IEnumerable<Ad>> Sort(bool IsVerified) => await _adsServices.GetSort(x => x.IsVerified == IsVerified);
 
-            if (!ad.IsVerified)
+        [HttpPost]
+        public async Task<IActionResult> ControlAdVisibility(int id)
+        {
+            try
             {
-                ad.IsVerified = true;
+                var ad = await _adsServices.GetAsync(id);
+                if (ad == null)
+                    return BadRequest("Not Found!");
+
+                ad.IsVerified = !ad.IsVerified;
                 await _adsServices.UpdateAsync(ad);
 
                 var user = await _userManager.FindByIdAsync(ad.UserId);
-                await _emailSender.SendEmailAsync(user.Email, $"WebAds Ad({ad.Name})", $"<h3>Ad \"{ad.Name}\" has been activated!</h3>");
+                await _emailSender.SendEmailAsync(
+                    user.Email,
+                    $"WebAds Ad({ad.Name})",
+                    $"<p>For the ad \"{ad.Name}\" has been changed, the visibility status to {(ad.IsVerified ? "\"public\"" : "\"private\"")} </p>" + 
+                    $"{(ad.IsVerified ? "" : "<p>Status: \"Violations of the rules\".</p><p>For more information write to us.</p>")}");
 
-                return Ok($"Ad \"ID:{ad.Id}\" has been activated!");
+                return Ok(ad.IsVerified ? "Activated" : "Deactivated");
             }
-
-            return BadRequest("This ad is already active.");
-        }
-        public async Task<IActionResult> DeactivatedAd(int id)
-        {
-            var ad = await _adsServices.GetAsync(id);
-            if (ad == null)
-                return BadRequest("Not Found!");
-
-
-            if (ad.IsVerified)
+            catch (Exception ex)
             {
-                ad.IsVerified = false;
-                await _adsServices.UpdateAsync(ad);
-
-                var user = await _userManager.FindByIdAsync(ad.UserId);
-                await _emailSender.SendEmailAsync(user.Email, $"WebAds Ad({ad.Name})", $"<h3>Ad \"{ad.Name}\" has been deactivate!</h3>");
-
-                return Ok($"Ad \"ID:{ad.Id}\" has been Deactivated!");
+                return BadRequest(ex.Message);
             }
-
-            return BadRequest("This ad is already deactivate.");
         }
 
     }

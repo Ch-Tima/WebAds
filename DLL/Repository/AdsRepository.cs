@@ -41,8 +41,7 @@ namespace DLL.Repository
                     },
                     UserId = x.UserId,
 
-                }).Where(predicate)
-                .ToListAsync();
+                }).Where(predicate).ToListAsync();
         }
 
         public async Task<IEnumerable<Ad>> FindOnly(Expression<Func<Ad, bool>> predicate)
@@ -53,6 +52,11 @@ namespace DLL.Repository
         public async Task<IEnumerable<Ad>> GetAllAsync()
         {
             return await _dbContext.Ads.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Ad>> GetSort(Expression<Func<Ad, bool>> predicate)
+        {
+            return await _dbContext.Ads.OrderBy(predicate).ToListAsync();
         }
 
         public async Task<Ad> GetAsync(int id)

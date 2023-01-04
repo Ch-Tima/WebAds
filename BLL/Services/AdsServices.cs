@@ -33,6 +33,10 @@ namespace BLL.Services
         {
             return await _adRepository.FindOnly(expression);
         }
+        public async Task<IEnumerable<Ad>> GetSort(Expression<Func<Ad, bool>> predicate)
+        {
+            return await _adRepository.GetSort(predicate);
+        }
 
         public async Task<Ad> GetAsync(int id)
         {

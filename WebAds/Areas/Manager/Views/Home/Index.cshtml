@@ -1,6 +1,4 @@
-﻿@model IEnumerable<Domain.Models.Ad>
-
-@{
+﻿@{
     ViewData["Title"] = "Index";
     Layout = "_Layout";
 }
@@ -8,51 +6,27 @@
 <div class="MainContext">
     <table class="table">
         <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateCreate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UserId)
-            </th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in Model)
-        {
             <tr>
-                <td>@item.Id</td>
-                <td>@item.DateCreate.ToString("MM/dd/yyyy h:mm tt")</td>
-                <td>@item.Name</td>
-                <td>@item.UserId</td>
-                <td>
-                    
-                    @{
-                        if(item.IsVerified)
-                        {
-                            @Html.ActionLink("Deactivated", "DeactivatedAd", new { id = item.Id })
-                        }
-                        else
-                        {
-                            @Html.ActionLink("Activ", "ActivAd", new { id = item.Id })
-                        }
-                    }
-
-                    
-                    | @Html.ActionLink("Delete", "Delete", new { id = item.Id }) |
-                    @Html.ActionLink("Details", "AdDetails", "Home", new { area="", id = item.Id })
-                </td>
-                <td></td>
+                <th>Id</th>
+                <th>DateCreate</th>
+                <th>Name</th>
+                <th>UserId</th>
+                <th id="sortStatus">Status</th>
+                <th></th>
             </tr>
-        }
+        </thead>
+        <tbody id="listAd">
         </tbody>
     </table>
 
 </div>
+
+@section Scripts{
+    <script src="~/js/Manager/Manager.js"></script>
+    <script>
+        $(() => {
+             $("#sortStatus").click(onClickSort);
+            onClickSort();
+        });
+    </script>
+}
