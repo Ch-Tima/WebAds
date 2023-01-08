@@ -2,6 +2,9 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<Domain.Models.User> SignInManager
 @inject UserManager<Domain.Models.User> UserManager
+@{
+    bool isSignIn = SignInManager.IsSignedIn(User);
+}
 
 <input type="hidden" id="AdId" value="@Model.Id" />
 <div>
@@ -15,9 +18,33 @@
                 <p>Ad data:</p>
                 <p>Title:@Model.Name</p>
                 <p>Price:@Model.Price</p>
-                <p>City: @Model.City.Name</p>
+                <p>City: @Model.CityName</p>
+                <div style="display: flex;">
+                    @{
+                        <p id="countFavouite">@Model.FavoritesAds.Count</p>
+                        if (isSignIn)
+                        {
+                            var user = await UserManager.GetUserAsync(User);
+                            @if (user.FavoritesAds.Any(x => x.AdId == Model.Id))
+                            {
+                                <img id="starFavoriteAd" style="height: 25px;" src="~/img/star_pressed.png" onclick="RemoveFavourite()">
+                            }
+                            else
+                            {
+                                <img id="starFavoriteAd" style="height: 25px;" src="~/img/star_not_pressed.png" onclick="AddFavourite()">
+                            }
+                        }
+                        else
+                        {
+                            <a class="nav-link text-dark" asp-area="Identity" asp-controller="Account" asp-action="Login" style="padding: 0;margin: 0;">
+                                <img id="starFavoriteAd" style="height: 25px;" src="~/img/star_not_pressed.png">
+                            </a>
+                        }
+
+
+                    }
+                </div>
             </div>
-            
             <div class="UserData">
                 <hr id="HrUserData" />
 
@@ -36,11 +63,9 @@
                         <p>@Model.User.PhoneNumber</p>
                     }
                 }
-                
 
-                <a href="~/Profile/Index/@Model.UserId">User Profile</a>
+                <a asp-area="" asp-controller="Profile" asp-action="Public" asp-route-userId="@Model.UserId">User Profile</a>
             </div>
-
         </div>
     </div>
 
@@ -52,15 +77,13 @@
     </div>
 </div>
 
-@{
-    if (SignInManager.IsSignedIn(User))
-    {
+@if (isSignIn)
+{
     <hr />
     <div style="display: table-caption;">
         <textarea id="commentText"></textarea>
         <button id="btnAddComment" disabled>AddComment</button>
     </div>
-    }
 }
 
 <div class="ListComment" id="listComment">
@@ -69,21 +92,11 @@
 @section Styles{
     <link rel="stylesheet" href="~/css/AdDetails.css" asp-append-version="true" />
 }
+
 @section Scripts{
     <script>
         $(function () {
             Get();
-            $("#commentText").on("input", function () {
-                if ($("#commentText").val().length > 0) {
-                    $("#btnAddComment").removeAttr("disabled");
-                }
-                else {
-                    $("#btnAddComment").attr("disabled", "disabled")
-                }
-            });
-            $("#btnAddComment").on("click", function () {
-                Add();
-            });
         });
         function Get() {
             $.ajax({
@@ -96,7 +109,7 @@
                             "<div class='CommentData'>" +
                             "<p>User:" + data[i].user.userName + "</p>" +
                             "<p>DateCreate:" + $.format.date(data[i].dateCreate, "dd/MM/yyyy hh:mm") + "</p>" +
-                            "</div>"+
+                            "</div>" +
                             "<p>Content:" + data[i].content + "</p>" +
                             "</div>");
                     }
@@ -106,24 +119,72 @@
                 }
             });
         }
-        function Add() {
-            var comment = new Object;
-            comment.Content = $("#commentText").val();
-            comment.AdId = $("#AdId").val();
-            $.ajax({
-                url: "../../api/ApiComment",
-                type: "POST",
-                contentType: 'application/json',
-                data: JSON.stringify(comment),
-                success: function (data) {
-                    $("#commentText").val("");
-                    $("#btnAddComment").attr("disabled", "disabled");
-                    Get();
-                },
-                error: function (err) {
-                    console.log(err);
-                }
-            });
-        }
     </script>
+    @if (isSignIn)
+    {
+        <script>
+            $(function () {
+                $("#commentText").on("input", function () {
+                    if ($("#commentText").val().length > 0) {
+                        $("#btnAddComment").removeAttr("disabled");
+                    }
+                    else {
+                        $("#btnAddComment").attr("disabled", "disabled")
+                    }
+                });
+                $("#btnAddComment").on("click", AddComment);
+            });
+
+            function AddComment() {
+                var comment = new Object;
+                comment.Content = $("#commentText").val();
+                comment.AdId = $("#AdId").val();
+                $.ajax({
+                    url: "../../api/ApiComment",
+                    type: "POST",
+                    contentType: 'application/json',
+                    data: JSON.stringify(comment),
+                    success: function (data) {
+                        $("#commentText").val("");
+                        $("#btnAddComment").attr("disabled", "disabled");
+                        Get();
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }
+
+            function AddFavourite() {
+                $.ajax({
+                    url: "../../api/ApiFavouritesAd",
+                    type: "PUT",
+                    contentType: 'application/json',
+                    data: $("#AdId").val(),
+                    success: function (data) {
+                        $("#starFavoriteAd").attr("src", "../../img/star_pressed.png");
+                        $("#starFavoriteAd").attr("onclick", "RemoveFavourite()");
+                        $("#countFavouite").text(parseInt($("#countFavouite").text()) + 1);
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }
+            function RemoveFavourite() {
+                $.ajax({
+                    url: "../../api/ApiFavouritesAd/" + $("#AdId").val(),
+                    type: "DELETE",
+                    success: function (data) {
+                        $("#starFavoriteAd").attr("src", "../../img/star_not_pressed.png");
+                        $("#starFavoriteAd").attr("onclick", "AddFavourite()");
+                        $("#countFavouite").text(parseInt($("#countFavouite").text()) - 1);
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
+            }
+        </script>
+    }
 }

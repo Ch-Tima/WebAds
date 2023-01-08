@@ -28,11 +28,11 @@ namespace WebAds.Controllers
             _userServices = userServices;
             _appEnvironment = appEnvironment;
             _emailService = emailService;
+
         }
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.IsPublicProfile = false;
             return View(await _userManager.GetUserAsync(User));
         }
 
@@ -42,17 +42,17 @@ namespace WebAds.Controllers
         /// <param name="userId">User ID</param>
         /// <returns></returns>
         [AllowAnonymous]
-        [HttpGet("Profile/Index/{userId}")]
-        public async Task<IActionResult> Index(string userId)
+        [HttpGet("Profile/Public/{userId}")]
+        public async Task<IActionResult> Public(string userId)
         {
-            ViewBag.IsPublicProfile = true;
-            return View(await _userServices.GetAsync(userId));
+            return View(await _userManager.FindByIdAsync(userId));
         }
 
         public async Task<IActionResult> AddNewAd()
         {
             return View(await _userManager.GetUserAsync(User));
         }
+
         [HttpPost]
         public async Task<IActionResult> UpdateAd(int idAd)
         {
@@ -88,6 +88,7 @@ namespace WebAds.Controllers
 
             return View(user);
         }
+
         [HttpPost]
         [AutoValidateAntiforgeryToken]
         public async Task<IActionResult> UpdateProfile(User model, IFormFile? file)

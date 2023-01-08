@@ -22,6 +22,7 @@ namespace BLL.Infrastructure
             services.AddTransient<CityRepository>();
             services.AddTransient<CommentRepository>();
             services.AddTransient<UserRepository>();
+            services.AddTransient<FavouritesAdRepository>();
 
             //Set settings Identity
             services.AddIdentity<User, IdentityRole>(opt =>

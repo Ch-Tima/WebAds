@@ -8,16 +8,13 @@
 }
 <h4 style="text-align: center; color: red;">@ViewBag.Error</h4>
 
-    <div class="MainContener">
+<div class="MainContener">
         <input type="hidden" id="UserID" value="@Model.Id" />
         <div class="Icon">
             <img class="UserIcon" src="../../@Model.IconPath">
-        @if (!ViewBag.IsPublicProfile)
-        {
-            <a asp-action="UpdateProfile" asp-controller="Profile">
-                <img class="EditIcon" src="../../img/edit.png" />
-            </a>
-        }
+        <a asp-action="UpdateProfile" asp-controller="Profile">
+            <img class="EditIcon" src="../../img/edit.png" />
+        </a>
     </div>
     <div class="RightData">
         <div class="UserData">
@@ -33,37 +30,40 @@
 
 
         </div>
-        @if (!ViewBag.IsPublicProfile)
-        {
-            <a asp-controller="Profile" asp-action="AddNewAd">AddNew</a>
-        }
+        <a asp-controller="Profile" asp-action="AddNewAd">AddNew</a>
     </div>
 </div>
 
-<div id="userAds" class="ListAd">
+<div class="BtnMenu">
+    <button id="getMyAds" style="background: lightgrey;">Ads</button>
+    <button id="getMyFavorites">FavoritesAds</button>
+</div>
+
+<div id="listAds" class="ListAd">
 </div>
 
 
 @section Scripts{
     <script src="~/js/Profile/OperationOnAds.js"></script>
     <script src="~/js/Profile/Profile.js"></script>
+    <script>
 
+        $(function(){
 
-    @if (ViewBag.IsPublicProfile)
-    {
-        <script>
-            $(function () {
+            $("#getMyAds").on("click", function () {
                 GetUserAds(false);
-            });
-        </script>
-    }
-    else{
-        <script>
-            $(function () {
-                GetUserAds(true);
-            });
-        </script>
-    }
 
+                $(this).css("background", "lightgrey");
+                $("#getMyFavorites").css("background", "white");
+            });
+            $("#getMyFavorites").on("click", function(){
+                GetFavouriteAds();
 
+                $(this).css("background", "lightgrey");
+                $("#getMyAds").css("background", "white");
+            })
+
+            GetUserAds(false);
+        });
+    </script>
 }

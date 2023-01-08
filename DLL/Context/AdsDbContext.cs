@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DLL.Context
 {
-    public class AdDbContext : IdentityDbContext<User>
+    public class AdDbContext : IdentityDbContext<User, IdentityRole, string>
     {
         public AdDbContext(DbContextOptions<AdDbContext> options) : base(options)
         {
@@ -37,7 +37,8 @@ namespace DLL.Context
             modelBuilder.Entity<User>().Property(x => x.IsMailing).IsRequired().HasColumnType("bit").HasDefaultValue(false);
             modelBuilder.Entity<User>().Property(x => x.IconPath).IsRequired().HasColumnType("varchar").HasMaxLength(225).HasDefaultValue("img/defUser.png");
             //CityName OneToMany
-            modelBuilder.Entity<User>().HasOne(x => x.City).WithMany(x => x.Users).HasForeignKey(x => x.CityName).OnDelete(DeleteBehavior.ClientNoAction);
+            //modelBuilder.Entity<User>().Property<string>(x => x.CityName).IsRequired(false);
+            modelBuilder.Entity<User>().HasOne(x => x.City).WithMany(x => x.Users).HasForeignKey(x => x.CityName).OnDelete(DeleteBehavior.SetNull);
 
 
             //Categoty
@@ -59,6 +60,12 @@ namespace DLL.Context
             modelBuilder.Entity<Comment>().HasOne(x => x.Ad).WithMany(x => x.Comments).HasForeignKey(x => x.AdId);
             //User -> Comments OneToMany
             modelBuilder.Entity<Comment>().HasOne(x => x.User).WithMany(x => x.Comments).HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
+
+            //FavoritesAd
+            modelBuilder.Entity<FavouritesAd>().HasIndex(x => x.Id).IsUnique();
+            //modelBuilder.Entity<FavouritesAd>().HasKey(x => new { x.AdId, x.UserId });
+            modelBuilder.Entity<FavouritesAd>().HasOne(x => x.User).WithMany(x => x.FavoritesAds).HasForeignKey(x => x.UserId).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<FavouritesAd>().HasOne(x => x.Ad).WithMany(x => x.FavoritesAds).HasForeignKey(x => x.AdId).OnDelete(DeleteBehavior.NoAction);
 
 
             //default initialization
@@ -95,37 +102,38 @@ namespace DLL.Context
                     UserId = managerDef.Id
                 }
             });
+            
             modelBuilder.Entity<City>().HasData(new City[]
             {
                 new City()
                 {
-                    Name = "Name_0F",
-                    Region = "Region_F"
+                    Name = "Kharkiv",
+                    Region = "Kharkiv"
                 },
                 new City()
                 {
-                    Name = "Name_1F",
-                    Region = "Region_F"
+                    Name = "Lozova",
+                    Region = "Kharkiv"
                 },
                 new City()
                 {
-                    Name = "Name_78B",
-                    Region = "Region_B"
+                    Name = "Izium",
+                    Region = "Kharkiv"
                 },
                 new City()
                 {
-                    Name = "Name_24B",
-                    Region = "Region_B"
+                    Name = "Odesa",
+                    Region = "Odesa"
                 },
                 new City()
                 {
-                    Name = "Name_22B",
-                    Region = "Region_B"
+                    Name = "Izmail",
+                    Region = "Odesa"
                 },
                 new City()
                 {
-                    Name = "Name_99X",
-                    Region = "Region_X"
+                    Name = "Dnipro",
+                    Region = "Dnipro­petrovsk"
                 }
             });
 
@@ -134,58 +142,87 @@ namespace DLL.Context
                 new Category()
                 {
                     Id = 1,
-                    Name = "Category_EE"
+                    Name = "House and garden"
                 },
                 new Category()
                 {
                     Id = 88,
-                    Name = "Category_0E",
+                    Name = "Instruments",
                     CategoryId = 1,
                 },
                 new Category()
                 {
                     Id = 89,
-                    Name = "Category_1E",
+                    Name = "Furniture",
                     CategoryId = 1
                 },
+
                 new Category()
                 {
                     Id = 2,
-                    Name = "Category_CC",
+                    Name = "Transport",
                 },
+
                 new Category()
                 {
                     Id = 3,
-                    Name = "Category_FF",
+                    Name = "Electronics",
                 },
+
                 new Category()
                 {
                     Id = 77,
-                    Name = "Category_F1",
+                    Name = "PC",
                     CategoryId = 3
                 },
                 new Category()
                 {
+                    Id = 6231,
+                    Name = "CPU",
+                    CategoryId = 77
+                },
+                new Category()
+                {
+                    Id = 6232,
+                    Name = "GPU",
+                    CategoryId = 77
+                },
+                new Category()
+                {
+                    Id = 6233,
+                    Name = "SSD/HDD",
+                    CategoryId = 77
+                },
+                new Category()
+                {
+                    Id = 6234,
+                    Name = "RAM",
+                    CategoryId = 77
+                },
+
+
+                new Category()
+                {
                     Id = 78,
-                    Name = "Category_F0",
+                    Name = "Phone",
                     CategoryId = 3
                 },
                 new Category()
                 {
                     Id = 66,
-                    Name = "Category_F0A",
+                    Name = "Samsung",
                     CategoryId = 78
                 },
                 new Category()
                 {
                     Id = 67,
-                    Name = "Category_F0B",
+                    Name = "Xiaomi",
                     CategoryId = 78
                 },
                 new Category()
                 {
                     Id = 68,
-                    Name = "Category_F0C",
+                    Name = "Apple",
                     CategoryId = 78
                 },
 
@@ -197,5 +234,6 @@ namespace DLL.Context
         public DbSet<Category> Categories { get; set; }
         public DbSet<City> Cities { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<FavouritesAd> FavouritesAds { get; set; }
     }
 }

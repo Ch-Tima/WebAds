@@ -7,22 +7,21 @@ function GetUserAds(isPublic) {
             userId: $("#UserID").val()
         },
         success: function (data) {
-
-            $("#userAds").html();
+            $("#listAds").empty();
             for (var i = 0; i < data.length; i++) {
 
-                var tempString = '<div id="Ad_' + data[i].id + '" class="Ad">' +
-                    
+                var tempString = '<form class="InputPageMovie" method="get" action="../../../Home/AdDetails">' +
+                    '<div id="Ad_' + data[i].id + '" class="Ad" onclick="this.parentNode.submit();">' +
+                    '<input type="hidden" name="id" value="' + data[i].id + '"/>' +
                     '<div class="DataAd">' +
                     '<img src="' + data[i].pathImg + '" style="width: 80px;">' + 
                     '<div class="DataAdText">' +
                         '<p>Name:' + data[i].name + '"</p>' +
                         '<p>Price:' + data[i].price + '</p>' + 
-                    '</div>' +
-                    '</div>';
+                    '</div></div>' +
+                    '</form>';
 
-
-                if (isPublic) {
+                if (!isPublic) {
                     tempString += '<div class="btnControlAd">' +
                         '<button type="button" class="btnRemove" value="' + data[i].id + '">Remove</button>' +
                         '<form method="post" action="../../Profile/UpdateAd">' +
@@ -34,9 +33,8 @@ function GetUserAds(isPublic) {
                     tempString += '</div>';
                 }
 
-                $("#userAds").append(tempString);
+                $("#listAds").append(tempString);
             }
-
             $("button[class='btnRemove']").on("click", function () {
                 RemoveAd($(this).val());
             });

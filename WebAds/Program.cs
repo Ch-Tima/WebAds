@@ -21,6 +21,7 @@ builder.Services.AddTransient<AdsServices>();
 builder.Services.AddTransient<CityServices>();
 builder.Services.AddTransient<CommentServices>();
 builder.Services.AddTransient<CategoryServices>();
+builder.Services.AddTransient<FavouritesAdService>();
 
 builder.Services.AddTransient<IEmailSender, SendGridEmailService>();//SendGrid
 

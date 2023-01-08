@@ -8,6 +8,7 @@ namespace Domain.Models
         {
             Comments = new List<Comment>();
             Ads = new List<Ad>();
+            FavoritesAds = new List<FavouritesAd>();
         }
 
         public string Surname { get; set; }
@@ -21,5 +22,6 @@ namespace Domain.Models
 
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<Ad> Ads { get; set; }
+        public virtual ICollection<FavouritesAd> FavoritesAds { get; set; }
     }
 }

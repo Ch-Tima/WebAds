@@ -66,6 +66,7 @@ namespace DLL.Repository
                 .Include(x => x.Categoty)
                 .Include(x => x.City)
                 .Include(x => x.Comments)
+                .Include(x => x.FavoritesAds)
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 

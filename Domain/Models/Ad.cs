@@ -5,6 +5,7 @@
         public Ad()
         {
             Comments = new List<Comment>();
+            FavoritesAds = new List<FavouritesAd>();
         }
 
         public int Id { get; set; }
@@ -34,5 +35,7 @@
         public User? User { get; set; }
 
         public virtual ICollection<Comment>? Comments { get; set; }
+
+        public virtual ICollection<FavouritesAd> FavoritesAds { get; set; }
     }
 }

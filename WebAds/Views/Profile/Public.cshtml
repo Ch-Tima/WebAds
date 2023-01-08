@@ -1,0 +1,41 @@
+﻿@model Domain.Models.User;
+@{
+    ViewData["Title"] = Model.UserName;
+}
+
+@section Styles{
+    <link rel="stylesheet" href="~/css/Profile.css" />
+}
+<h4 style="text-align: center; color: red;">@ViewBag.Error</h4>
+
+<div class="MainContener">
+    <input type="hidden" id="UserID" value="@Model.Id" />
+    <div class="Icon">
+        <img class="UserIcon" src="../../@Model.IconPath">
+    </div>
+    <div class="RightData">
+        <div class="UserData">
+
+            <label>Name:</label>
+            <p>@Model.UserName</p>
+
+            <label>Surname:</label>
+            <p>@Model.Surname</p>
+
+            <label>Email:</label>
+            <p>@Model.Email</p>
+        </div>
+    </div>
+</div>
+
+<div id="listAds" class="ListAd">
+</div>
+
+@section Scripts{
+    <script src="~/js/Profile/OperationOnAds.js"></script>
+    <script>
+        $(function () {
+            GetUserAds(true);
+        });
+    </script>
+}

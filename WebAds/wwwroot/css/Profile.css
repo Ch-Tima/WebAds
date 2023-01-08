@@ -31,8 +31,8 @@
 .Ad {
     display: flex;
     justify-content: space-between;
-    background-color: aquamarine;
-    width: 70%;
+    background-color: #ffffff;
+    width: 100%;
     height: 100px;
     margin: 3px auto;
 }
@@ -45,12 +45,12 @@ button {
 
 .btnControlAd {
     display: flex;
-    margin: auto 0;
+    margin: auto 5px auto 0;
 }
 
-    .btnControlAd button {
-        margin: 0 2px;
-    }
+.btnControlAd button {
+    margin: 0 2px;
+}
 
 .DataAd {
     display: flex;
@@ -58,6 +58,17 @@ button {
 
 .DataAdText {
     display: block;
+}
+
+.BtnMenu {
+    display: flex;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.BtnMenu button {
+    border: none;
+    background: white;
 }
 
 @media (max-width: 768px) {
